@@ -57,7 +57,7 @@ class ParserService:
         Returns:
             Equation: equation object with tokens
         """
-        pattern = r"([\=\+\-\%\*])"
+        pattern = r"([\+\-\%\*])"
         tokens = re.split(pattern, equation.raw_equation())
         equation.set_tokens(tokens)
         return equation
