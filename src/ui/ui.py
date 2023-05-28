@@ -16,5 +16,5 @@ class UI:
         else:
             print("not a valid equation!")
 
-        calculator_service.shunting_yard(equation)
+        calculator_service.solve(equation)
         
