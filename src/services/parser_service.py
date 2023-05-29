@@ -1,8 +1,12 @@
+"""Responsible for parsing and validatig equations"""
 import re
 from entities.equation import Equation
 
 
 class ParserService:
+    """
+    Responsible for parsing and validatig equations
+    """
     def __init__(self):
         self._validations = [
             self._equation_starts_with_valid_token
@@ -24,7 +28,7 @@ class ParserService:
         if not equation.raw_equation()[0].isdigit():
             return False
         return True
-    
+
     def _equation_starts_with_left_paranthesis(
             self,
             equation: Equation
@@ -41,7 +45,7 @@ class ParserService:
         if equation.raw_equation()[0] == "(":
             return True
         return False
-    
+
     def _equation_starts_with_valid_token(
             self,
             equation: Equation
@@ -61,7 +65,6 @@ class ParserService:
             return True
         return False
 
-        
     def validate_equation(
             self,
             equation: Equation
@@ -79,7 +82,7 @@ class ParserService:
             if not validation(equation):
                 return False
         return True
-    
+
     def parse_to_tokens(
             self,
             equation: Equation
@@ -98,6 +101,5 @@ class ParserService:
         tokens = re.split(pattern, equation.raw_equation())
         equation.set_tokens(tokens)
         return equation
-        
-    
+
 parser_service = ParserService()
