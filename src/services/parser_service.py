@@ -5,7 +5,7 @@ from entities.equation import Equation
 class ParserService:
     def __init__(self):
         self._validations = [
-            self._equation_starts_with_digit
+            self._equation_starts_with_valid_token
         ]
 
     def _equation_starts_with_digit(
@@ -24,6 +24,43 @@ class ParserService:
         if not equation.raw_equation()[0].isdigit():
             return False
         return True
+    
+    def _equation_starts_with_left_paranthesis(
+            self,
+            equation: Equation
+    ) -> bool:
+        """
+        Check if equations starts with left paranthesis
+
+        Args:
+            equation (Equation): equation object validate
+
+        Returns:
+            bool: True if starts with '(' , else False
+        """
+        if equation.raw_equation()[0] == "(":
+            return True
+        return False
+    
+    def _equation_starts_with_valid_token(
+            self,
+            equation: Equation
+    ) -> bool:
+        """
+        Check if equations starts with valid token
+
+        Args:
+            equation (Equation): equation object to validate
+
+        Returns:
+            bool: True if valid token, else False
+        """
+        if self._equation_starts_with_digit(equation):
+            return True
+        if self._equation_starts_with_left_paranthesis(equation):
+            return True
+        return False
+
         
     def validate_equation(
             self,
