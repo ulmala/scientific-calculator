@@ -1,5 +1,5 @@
 from entities.equation import Equation
-from algorithms.shunting_yard2 import (
+from algorithms.shunting_yard import (
     shunting_yard as default_shunting_yard
 )
 
