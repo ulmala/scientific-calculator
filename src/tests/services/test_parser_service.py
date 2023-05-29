@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import MagicMock
 from entities.equation import Equation
 from services.parser_service import ParserService
 
@@ -39,8 +40,14 @@ class TestParserService(unittest.TestCase):
         self.assertFalse(self.parser_service.validate_equation(equation))
 
     def test_parse_to_tokens_parsers_equation_correctly(self):
-        eq = Equation("2+10-1")
+        equation = Equation("2+10-1")
         correct_tokens = ["2", "+", "10", "-", "1"]
-        eq = self.parser_service.parse_to_tokens(eq)
-        tokens = eq.tokens()
+        equation = self.parser_service.parse_to_tokens(equation)
+        tokens = equation.tokens()
         self.assertEqual(correct_tokens, tokens)
+
+    def test_parse_to_tokens_calls_set_tokens_with_correct_args(self):
+        equation = Equation("1+1")
+        equation.set_tokens = MagicMock()
+        self.parser_service.parse_to_tokens(equation)
+        equation.set_tokens.assert_called_once_with(["1", "+", "1"])
