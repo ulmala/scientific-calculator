@@ -13,3 +13,6 @@ class OutputQueue:
             token: str
     ):
         self._queue.put(token)
+
+    def get(self) -> str:
+        return self._queue.get()
