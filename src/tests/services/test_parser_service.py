@@ -40,8 +40,8 @@ class TestParserService(unittest.TestCase):
         self.assertFalse(self.parser_service.validate_equation(equation))
 
     def test_parse_to_tokens_parsers_equation_correctly(self):
-        equation = Equation("2+10-1")
-        correct_tokens = ["2", "+", "10", "-", "1"]
+        equation = Equation("2+(10-1)")
+        correct_tokens = ["2", "+", "(", "10", "-", "1", ")"]
         equation = self.parser_service.parse_to_tokens(equation)
         tokens = equation.tokens()
         self.assertEqual(correct_tokens, tokens)
