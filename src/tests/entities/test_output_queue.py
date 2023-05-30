@@ -10,3 +10,7 @@ class TestOutputQueue(unittest.TestCase):
         self.output_queue.put("+")
         self.output_queue.put("-")
         self.assertEqual(str(["+", "-"]), str(self.output_queue))
+
+    def test_get_returns_correct_value(self):
+        self.output_queue.put("+")
+        self.assertEqual("+", self.output_queue.get())
