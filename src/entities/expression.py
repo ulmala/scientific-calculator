@@ -1,13 +1,13 @@
-class Equation:
+class Expression:
     def __init__(
             self,
-            raw_equation
+            raw_expression
     ) -> None:
-        self._raw_equation = raw_equation
+        self._raw_expression = raw_expression
         self._tokens = []
 
-    def raw_equation(self) -> str:
-        return self._raw_equation
+    def raw_expression(self) -> str:
+        return self._raw_expression
     
     def tokens(self) -> list:
         return self._tokens

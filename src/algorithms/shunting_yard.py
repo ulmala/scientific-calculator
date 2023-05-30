@@ -1,4 +1,4 @@
-from entities.equation import Equation
+from entities.expression import Expression
 from entities.operator_stack import OperatorStack
 from entities.output_queue import OutputQueue
 
@@ -36,9 +36,9 @@ class ShutingYard:
 
     def run(
             self,
-            equation: Equation
-    ) -> Equation:
-        tokens = equation.tokens()
+            expression: Expression
+    ) -> Expression:
+        tokens = expression.tokens()
         
         # while there are tokens to be read:
         for token in tokens:

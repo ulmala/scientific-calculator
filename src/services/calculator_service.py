@@ -1,4 +1,4 @@
-from entities.equation import Equation
+from entities.expression import Expression
 from services.shunting_yard_service import (
     shunting_yard_service as default_shunting_yard_service
 )
@@ -13,8 +13,8 @@ class CalculatorService:
 
     def solve(
             self,
-            equation: Equation
+            expression: Expression
     ):
-        self._shunting_yard_service.run(equation)
+        self._shunting_yard_service.run(expression)
 
 calculator_service = CalculatorService()

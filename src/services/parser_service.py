@@ -1,104 +1,104 @@
-"""Responsible for parsing and validatig equations"""
+"""Responsible for parsing and validatig expressions"""
 import re
-from entities.equation import Equation
+from entities.expression import Expression
 
 
 class ParserService:
     """
-    Responsible for parsing and validatig equations
+    Responsible for parsing and validatig expressions
     """
     def __init__(self):
         self._validations = [
-            self._equation_starts_with_valid_token
+            self._expression_starts_with_valid_token
         ]
 
-    def _equation_starts_with_digit(
+    def _expression_starts_with_digit(
             self,
-            equation: Equation
+            expression: Expression
     ) -> bool:
         """
-        Check if the equation starts with a digit.
+        Check if the expression starts with a digit.
 
         Args:
-            equation (Equation): equation object validate
+            expression (Expression): expression object validate
 
         Returns:
             bool: True if starts with digit, else False
         """
-        if not equation.raw_equation()[0].isdigit():
+        if not expression.raw_expression()[0].isdigit():
             return False
         return True
 
-    def _equation_starts_with_left_paranthesis(
+    def _expression_starts_with_left_paranthesis(
             self,
-            equation: Equation
+            expression: Expression
     ) -> bool:
         """
-        Check if equations starts with left paranthesis
+        Check if expressions starts with left paranthesis
 
         Args:
-            equation (Equation): equation object validate
+            expression (Expression): expression object validate
 
         Returns:
             bool: True if starts with '(' , else False
         """
-        if equation.raw_equation()[0] == "(":
+        if expression.raw_expression()[0] == "(":
             return True
         return False
 
-    def _equation_starts_with_valid_token(
+    def _expression_starts_with_valid_token(
             self,
-            equation: Equation
+            expression: Expression
     ) -> bool:
         """
-        Check if equations starts with valid token
+        Check if expressions starts with valid token
 
         Args:
-            equation (Equation): equation object to validate
+            expression (Expression): expression object to validate
 
         Returns:
             bool: True if valid token, else False
         """
-        if self._equation_starts_with_digit(equation):
+        if self._expression_starts_with_digit(expression):
             return True
-        if self._equation_starts_with_left_paranthesis(equation):
+        if self._expression_starts_with_left_paranthesis(expression):
             return True
         return False
 
-    def validate_equation(
+    def validate_expression(
             self,
-            equation: Equation
+            expression: Expression
     ) -> bool:
         """
-        Runs all equation validations.
+        Runs all expression validations.
         
         Args:
-            equation (Equation): equation object validate
+            expression (Expression): expression object validate
 
         Returns:
-            bool: True if valid equation, else False
+            bool: True if valid expression, else False
         """
         for validation in self._validations:
-            if not validation(equation):
+            if not validation(expression):
                 return False
         return True
 
     def parse_to_tokens(
             self,
-            equation: Equation
-    ) -> Equation:
+            expression: Expression
+    ) -> Expression:
         """
-        Parse raw equation into list of tokens. Updates equation 
+        Parse raw expression into list of tokens. Updates expression 
         object and returns it.
 
         Args:
-            equation (Equation): equation object with no tokens
+            expression (Expression): expression object with no tokens
 
         Returns:
-            Equation: equation object with tokens
+            Expression: expression object with tokens
         """
-        tokens = re.findall(r"\d+|\S", equation.raw_equation())
-        equation.set_tokens(tokens)
-        return equation
+        tokens = re.findall(r"\d+|\S", expression.raw_expression())
+        expression.set_tokens(tokens)
+        return expression
 
 parser_service = ParserService()

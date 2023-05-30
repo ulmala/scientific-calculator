@@ -1,20 +1,20 @@
 from services.calculator_service import calculator_service
 from services.parser_service import parser_service
-from entities.equation import Equation
+from entities.expression import Expression
 
 class UI:
     def start(self):
-        user_input = input("submit equation: ")
+        user_input = input("submit expression: ")
         if user_input == "q":
             return
         else:
-            equation = Equation(user_input)
+            expression = Expression(user_input)
 
-        if parser_service.validate_equation(equation):
-            parser_service.parse_to_tokens(equation)
-            print(equation.tokens())
+        if parser_service.validate_expression(expression):
+            parser_service.parse_to_tokens(expression)
+            print(expression.tokens())
         else:
-            print("not a valid equation!")
+            print("not a valid expression!")
 
-        calculator_service.solve(equation)
+        calculator_service.solve(expression)
         

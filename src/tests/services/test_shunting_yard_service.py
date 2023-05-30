@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from entities.equation import Equation
+from entities.expression import Expression
 from services.shunting_yard_service import ShuntingYardService
 
 
