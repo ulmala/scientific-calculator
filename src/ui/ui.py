@@ -16,5 +16,6 @@ class UI:
         else:
             print("not a valid expression!")
 
-        calculator_service.solve(expression)
+        result = calculator_service.solve(expression)
+        print(result)
         
