@@ -150,4 +150,8 @@ class ShuntingYardService:
         print("stack:", self._operator_stack)
         print("queue: ", self._output_queue)
 
+        expression.set_postfix_notation(self._output_queue.as_list())
+        return expression
+
+
 shunting_yard_service = ShuntingYardService()
