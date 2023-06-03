@@ -16,3 +16,6 @@ class OutputQueue:
 
     def get(self) -> str:
         return self._queue.get()
+    
+    def as_list(self) -> list:
+        return list(self._queue.queue)
