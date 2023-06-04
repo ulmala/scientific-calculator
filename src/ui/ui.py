@@ -2,6 +2,7 @@ from services.calculator_service import calculator_service
 from services.parser_service import parser_service
 from entities.expression import Expression
 
+
 class UI:
     def start(self):
         user_input = input("submit expression: ")
@@ -18,4 +19,3 @@ class UI:
 
         result = calculator_service.solve(expression)
         print(result)
-        

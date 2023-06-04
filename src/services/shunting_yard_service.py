@@ -4,6 +4,7 @@ from entities.output_queue import OutputQueue
 
 from constants import OPERATOR_PRECEDENCE, OPERATORS, LEFT_ASSOCIATIVE_OPERATORS
 
+
 class ShuntingYardService:
     def __init__(self) -> None:
         self._output_queue = OutputQueue()
@@ -11,7 +12,7 @@ class ShuntingYardService:
         self._operator_prec = OPERATOR_PRECEDENCE
         self._operators = OPERATORS
         self._left_associative_operators = LEFT_ASSOCIATIVE_OPERATORS
-    
+
     def _operator_precedence(
             self,
             token: str
@@ -26,7 +27,7 @@ class ShuntingYardService:
             int: operator precedence
         """
         return self._operator_prec[token]
-    
+
     def _is_operator(
             self,
             token: str
@@ -43,7 +44,7 @@ class ShuntingYardService:
         if token in self._operators:
             return True
         return False
-    
+
     def _is_left_associative(
             self,
             token: str
@@ -60,7 +61,7 @@ class ShuntingYardService:
         if token in self._left_associative_operators:
             return True
         return False
-    
+
     def _pop_from_stack_to_queue(self):
         """
         Pop operator from stack into output queue
@@ -69,11 +70,11 @@ class ShuntingYardService:
         self._output_queue.put(operator)
 
     def _print_status(self, token):
-            print("*********** CURRENT STATUS ***********")
-            print("stack: ", self._operator_stack)
-            print("output queue: ", self._output_queue)
-            print("next token to be handled: ", token)
-            input()
+        print("*********** CURRENT STATUS ***********")
+        print("stack: ", self._operator_stack)
+        print("output queue: ", self._output_queue)
+        print("next token to be handled: ", token)
+        input()
 
     def run(
             self,
@@ -94,13 +95,14 @@ class ShuntingYardService:
             # if token is an operator:
             elif self._is_operator(token):
                 # while (
-                # there is an operator o2 at the top of the operator stack which is not a left parenthesis, 
+                # there is an operator o2 at the top of the operator stack which is not a left parenthesis,
                 # and (o2 has greater precedence than o1 or (o1 and o2 have the same precedence and o1 is left-associative))
                 # ):
                 if not self._operator_stack.is_empty():
                     while self._operator_stack.top_operator() != "(" and (
                             self._operator_stack.top_operator_precedence() > self._operator_precedence(token) or
-                            (self._operator_stack.top_operator_precedence() == self._operator_precedence(token) and self._is_left_associative(token))
+                            (self._operator_stack.top_operator_precedence() == self._operator_precedence(
+                                token) and self._is_left_associative(token))
                     ):
                         # pop o2 from the operator stack into the output queue
                         self._pop_from_stack_to_queue()
@@ -111,9 +113,9 @@ class ShuntingYardService:
                 self._operator_stack.push(token)
 
             # TODO: # - a ",":
-                    #   while the operator at the top of the operator stack is not a left parenthesis:
-                    #       pop the operator from the operator stack into the output queue
-            
+                #   while the operator at the top of the operator stack is not a left parenthesis:
+                #       pop the operator from the operator stack into the output queue
+
             # - a left parenthesis (i.e. "("):
             if token == "(":
                 # push it onto the operator stack
@@ -135,8 +137,8 @@ class ShuntingYardService:
                 # pop the left parenthesis from the operator stack and discard it
                 self._operator_stack.pop()
 
-                #TODO: if there is a function token at the top of the operator stack, then:
-                        # pop the function from the operator stack into the output queue
+                # TODO: if there is a function token at the top of the operator stack, then:
+                # pop the function from the operator stack into the output queue
 
         # /* After the while loop, pop the remaining items from the operator stack into the output queue. */
         # while there are tokens on the operator stack:
@@ -145,7 +147,7 @@ class ShuntingYardService:
                 # {assert the operator on top of the stack is not a (left) parenthesis}
 
         while not self._operator_stack.is_empty():
-            self._pop_from_stack_to_queue()  
+            self._pop_from_stack_to_queue()
 
         print("stack:", self._operator_stack)
         print("queue: ", self._output_queue)

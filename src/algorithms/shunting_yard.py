@@ -2,6 +2,7 @@ from entities.expression import Expression
 from entities.operator_stack import OperatorStack
 from entities.output_queue import OutputQueue
 
+
 class ShutingYard:
     def __init__(self) -> None:
         self._output_queue = OutputQueue()
@@ -39,7 +40,7 @@ class ShutingYard:
             expression: Expression
     ) -> Expression:
         tokens = expression.tokens()
-        
+
         # while there are tokens to be read:
         for token in tokens:
 
@@ -59,13 +60,14 @@ class ShutingYard:
             # if token is an operator:
             elif self._is_operator(token):
                 # while (
-                # there is an operator o2 at the top of the operator stack which is not a left parenthesis, 
+                # there is an operator o2 at the top of the operator stack which is not a left parenthesis,
                 # and (o2 has greater precedence than o1 or (o1 and o2 have the same precedence and o1 is left-associative))
                 # ):
                 if not self._operator_stack.is_empty():
                     while self._operator_stack.top_operator() != "(" and (
                             self._operator_stack.top_operator_precedence() > self._operator_prec[token] or
-                            (self._operator_stack.top_operator_precedence() == self._operator_prec[token] and self._is_left_associative(token))
+                            (self._operator_stack.top_operator_precedence(
+                            ) == self._operator_prec[token] and self._is_left_associative(token))
                     ):
                         # pop o2 from the operator stack into the output queue
                         print(token, self._operator_stack)
@@ -106,9 +108,9 @@ class ShutingYard:
                 self._operator_stack.pop()
                 print(self._operator_stack)
 
-                #TODO:
+                # TODO:
                 # if there is a function token at the top of the operator stack, then:
-                    # pop the function from the operator stack into the output queue
+                # pop the function from the operator stack into the output queue
 
         # /* After the while loop, pop the remaining items from the operator stack into the output queue. */
         # while there are tokens on the operator stack:
@@ -118,16 +120,10 @@ class ShutingYard:
         # {assert the operator on top of the stack is not a (left) parenthesis}
 
         while not self._operator_stack.is_empty():
-            self._pop_from_stack_to_queue()            
+            self._pop_from_stack_to_queue()
 
         print("stack:", self._operator_stack)
         print("queue: ", self._output_queue)
-
-
-            
-
-                
-            
 
 
 shunting_yard = ShutingYard()

@@ -7,6 +7,7 @@ class ParserService:
     """
     Responsible for parsing and validatig expressions
     """
+
     def __init__(self):
         self._validations = [
             self._expression_starts_with_valid_token
@@ -71,7 +72,7 @@ class ParserService:
     ) -> bool:
         """
         Runs all expression validations.
-        
+
         Args:
             expression (Expression): expression object validate
 
@@ -100,5 +101,6 @@ class ParserService:
         tokens = re.findall(r"\d+|\S", expression.raw_expression())
         expression.set_tokens(tokens)
         return expression
+
 
 parser_service = ParserService()

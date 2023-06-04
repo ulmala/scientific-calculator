@@ -29,10 +29,11 @@ class CalculatorService:
                 stack.append(token)
             else:
                 val_1 = stack.pop()
-                val_2 = stack.pop()            
+                val_2 = stack.pop()
                 stack.append(str(eval(val_2 + token + val_1)))
 
         result = float(stack.pop())
         return result
+
 
 calculator_service = CalculatorService()

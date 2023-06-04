@@ -50,6 +50,7 @@ class TestShuntingYardService(unittest.TestCase):
         self.shunting_yard_service._operator_stack.push("-")
         self.shunting_yard_service._pop_from_stack_to_queue()
         from_queue = self.shunting_yard_service._output_queue.get()
-        
+
         self.assertEqual("-", from_queue)
-        self.assertEqual("+", self.shunting_yard_service._operator_stack.top_operator())
+        self.assertEqual(
+            "+", self.shunting_yard_service._operator_stack.top_operator())

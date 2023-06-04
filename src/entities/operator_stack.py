@@ -1,5 +1,6 @@
 from constants import OPERATOR_PRECEDENCE, OPERATORS
 
+
 class OperatorStack:
     def __init__(self) -> None:
         self._stack = []
@@ -13,13 +14,13 @@ class OperatorStack:
         if len(self._stack) > 0:
             return False
         return True
-    
+
     def top_operator(self) -> str:
         return self._stack[-1]
-    
+
     def top_operator_precedence(self) -> int:
         return self._operator_prec[self.top_operator()]
-    
+
     def push(
             self,
             token: str

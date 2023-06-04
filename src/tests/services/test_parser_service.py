@@ -11,14 +11,18 @@ class TestParserService(unittest.TestCase):
     def test__expression_starts_with_digit(self):
         valid_expression = Expression("2+1")
         invalid_expression = Expression("+1")
-        self.assertTrue(self.parser_service._expression_starts_with_digit(valid_expression))
-        self.assertFalse(self.parser_service._expression_starts_with_digit(invalid_expression))
+        self.assertTrue(
+            self.parser_service._expression_starts_with_digit(valid_expression))
+        self.assertFalse(
+            self.parser_service._expression_starts_with_digit(invalid_expression))
 
     def test__expression_starts_with_left_paranthesis(self):
         valid_expression = Expression("(1+1)")
         invalid_expression = Expression("1+1")
-        self.assertTrue(self.parser_service._expression_starts_with_left_paranthesis(valid_expression))
-        self.assertFalse(self.parser_service._expression_starts_with_left_paranthesis(invalid_expression))
+        self.assertTrue(
+            self.parser_service._expression_starts_with_left_paranthesis(valid_expression))
+        self.assertFalse(self.parser_service._expression_starts_with_left_paranthesis(
+            invalid_expression))
 
     def test__expression_starts_with_valid_token(self):
         valid_expressions = [
@@ -27,13 +31,14 @@ class TestParserService(unittest.TestCase):
         ]
         invalid_expression = Expression("+3-1")
         for valid_expression in valid_expressions:
-            self.assertTrue(self.parser_service._expression_starts_with_valid_token(valid_expression))
-        self.assertFalse(self.parser_service._expression_starts_with_valid_token(invalid_expression))
-        
+            self.assertTrue(
+                self.parser_service._expression_starts_with_valid_token(valid_expression))
+        self.assertFalse(
+            self.parser_service._expression_starts_with_valid_token(invalid_expression))
+
     def test_validate_expression_returns_true_if_all_validations_passed(self):
         expression = Expression("(1+1)")
         self.assertTrue(self.parser_service.validate_expression(expression))
-
 
     def test_validate_expression_returns_false_if_any_validation_fails(self):
         expression = Expression("+3-1")

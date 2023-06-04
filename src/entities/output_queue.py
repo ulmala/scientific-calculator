@@ -7,7 +7,7 @@ class OutputQueue:
 
     def __str__(self) -> str:
         return str(list(self._queue.queue))
-    
+
     def put(
             self,
             token: str
@@ -16,6 +16,6 @@ class OutputQueue:
 
     def get(self) -> str:
         return self._queue.get()
-    
+
     def as_list(self) -> list:
         return list(self._queue.queue)

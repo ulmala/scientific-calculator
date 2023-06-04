@@ -38,5 +38,5 @@ class TestExpression(unittest.TestCase):
     def test_str_representation(self):
         self.expression._tokens = ["1", "+", "1"]
         self.expression._postfix_notation = ["+", "1", "1"]
-        correct_str =  f"raw expression: 1+1\ntokens: ['1', '+', '1']\npostfix notation: ['+', '1', '1']"
+        correct_str = f"raw expression: 1+1\ntokens: ['1', '+', '1']\npostfix notation: ['+', '1', '1']"
         self.assertEqual(correct_str, str(self.expression))

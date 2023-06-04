@@ -16,7 +16,7 @@ class Expression:
 
     def raw_expression(self) -> str:
         return self._raw_expression
-    
+
     def tokens(self) -> list:
         return self._tokens
 
@@ -31,10 +31,10 @@ class Expression:
             notation: list
     ):
         self._postfix_notation = notation
-    
+
     def postfix(self) -> list:
         return self._postfix_notation
-    
+
     def set_value(
             self,
             value
