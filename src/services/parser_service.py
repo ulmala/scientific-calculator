@@ -1,4 +1,3 @@
-"""Responsible for parsing and validatig expressions"""
 import re
 from entities.expression import Expression
 

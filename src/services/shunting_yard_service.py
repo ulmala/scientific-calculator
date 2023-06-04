@@ -6,6 +6,9 @@ from constants import OPERATOR_PRECEDENCE, OPERATORS, LEFT_ASSOCIATIVE_OPERATORS
 
 
 class ShuntingYardService:
+    """
+    Class responsible for executing the Shungting Yard algorithm
+    """
     def __init__(self) -> None:
         self._output_queue = OutputQueue()
         self._operator_stack = OperatorStack()
@@ -80,6 +83,9 @@ class ShuntingYardService:
             self,
             expression: Expression
     ) -> Expression:
+        """
+        The algorithm
+        """
         tokens = expression.tokens()
 
         # while there are tokens to be read:
