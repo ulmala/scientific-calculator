@@ -26,7 +26,7 @@ class Expression:
     ):
         self._tokens = tokens
 
-    def set_postfix_notation(
+    def set_postfix(
             self,
             notation: list
     ):

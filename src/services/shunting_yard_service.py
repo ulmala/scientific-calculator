@@ -150,7 +150,7 @@ class ShuntingYardService:
         print("stack:", self._operator_stack)
         print("queue: ", self._output_queue)
 
-        expression.set_postfix_notation(self._output_queue.as_list())
+        expression.set_postfix(self._output_queue.as_list())
         return expression
 
 
