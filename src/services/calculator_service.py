@@ -61,7 +61,7 @@ class CalculatorService:
             else:
                 val_1 = stack.pop()
                 val_2 = stack.pop()
-                stack.append(str(literal_eval(val_2 + token + val_1)))
+                stack.append(str(eval(val_2 + token + val_1))) # TODO: do this using ast; https://stackoverflow.com/questions/2371436/evaluating-a-mathematical-expression-in-a-string
 
         result = float(stack.pop())
         return result
