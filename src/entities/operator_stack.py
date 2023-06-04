@@ -20,11 +20,6 @@ class OperatorStack:
     def top_operator_precedence(self) -> int:
         return self._operator_prec[self.top_operator()]
     
-    def operator_at_top(self) -> bool:
-        if self._stack[-1] in self._operators:
-            return True
-        return False
-    
     def push(
             self,
             token: str
