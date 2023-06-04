@@ -1,5 +1,7 @@
 # Week 3
 
+Total time spent 8.5 h
+
 <ins>29.5.</ins>  
 Time spent: 3 hours  
 
@@ -19,4 +21,10 @@ Time spent: 2.5 hours
 Time spent: 1 hour  
 
 - add postfix notation evaluation
-- add instructions to `README.md`
+- add instructions to `README.md`  
+
+<ins>4.6.</ins>  
+Time spent: 2 hour  
+
+- adding tests, docstrings and linting
+- test document added [here](../test_document.md)
