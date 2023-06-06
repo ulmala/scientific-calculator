@@ -1,6 +1,8 @@
 import re
 from entities.expression import Expression
-
+from constants import (
+    SUPPORTED_FUNCTIONS
+)
 
 class ParserService:
     """
@@ -59,11 +61,14 @@ class ParserService:
         Returns:
             bool: True if valid token, else False
         """
-        if self._expression_starts_with_digit(expression):
-            return True
-        if self._expression_starts_with_left_paranthesis(expression):
-            return True
-        return False
+        # if self._expression_starts_with_digit(expression):
+        #     return True
+        # if self._expression_starts_with_left_paranthesis(expression):
+        #     return True
+        # if self._expression_starts_with_function(expression):
+        #     return True
+        # return False
+        return True
 
     def validate_expression(
             self,
@@ -97,7 +102,9 @@ class ParserService:
         Returns:
             Expression: expression object with tokens
         """
-        tokens = re.findall(r"\d+|\S", expression.raw_expression())
+        escaped_functions = [re.escape(substring) for substring in SUPPORTED_FUNCTIONS]
+        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\/|\(|\)|\,|" + "|".join(escaped_functions) + ")"
+        tokens = re.findall(pattern, expression.raw_expression())
         expression.set_tokens(tokens)
         return expression
 
