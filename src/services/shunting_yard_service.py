@@ -2,7 +2,12 @@ from entities.expression import Expression
 from entities.operator_stack import OperatorStack
 from entities.output_queue import OutputQueue
 
-from constants import OPERATOR_PRECEDENCE, OPERATORS, LEFT_ASSOCIATIVE_OPERATORS
+from constants import (
+    OPERATOR_PRECEDENCE,
+    OPERATORS,
+    LEFT_ASSOCIATIVE_OPERATORS,
+    SUPPORTED_FUNCTIONS
+)
 
 
 class ShuntingYardService:
@@ -15,6 +20,7 @@ class ShuntingYardService:
         self._operator_prec = OPERATOR_PRECEDENCE
         self._operators = OPERATORS
         self._left_associative_operators = LEFT_ASSOCIATIVE_OPERATORS
+        self._supported_functions = SUPPORTED_FUNCTIONS
 
     def _operator_precedence(
             self,
@@ -45,6 +51,34 @@ class ShuntingYardService:
             bool: True if operator, else False
         """
         if token in self._operators:
+            return True
+        return False
+    
+    def _is_number(
+            self,
+            token: str
+    ) -> bool:
+        try:
+            float(token)
+            return True
+        except:
+            return False
+
+
+    def _is_function(
+            self,
+            token: str
+    ) -> bool:
+        """
+        Checks if token is a supported function
+
+        Args:
+            token (str): token to be checked
+
+        Returns:
+            bool: True if supported operator, else False
+        """
+        if token in self._supported_functions:
             return True
         return False
 
@@ -93,10 +127,12 @@ class ShuntingYardService:
             self._print_status(token)
 
             # if token is a number: put it into the output queue
-            if token.isdigit():
+            if self._is_number(token):
                 self._output_queue.put(token)
 
-            # TODO: if token is a function: push it onto the operator stack
+            # if token is a function: push it onto the operator stack
+            if self._is_function(token):
+                self._operator_stack.push(token)
 
             # if token is an operator:
             elif self._is_operator(token):
@@ -143,8 +179,10 @@ class ShuntingYardService:
                 # pop the left parenthesis from the operator stack and discard it
                 self._operator_stack.pop()
 
-                # TODO: if there is a function token at the top of the operator stack, then:
-                # pop the function from the operator stack into the output queue
+                # if there is a function token at the top of the operator stack, then:
+                #   pop the function from the operator stack into the output queue
+                if self._operator_stack.function_at_top():
+                    self._pop_from_stack_to_queue()
 
         # /* After the while loop, pop the remaining items from the operator stack into the output queue. */
         # while there are tokens on the operator stack:
