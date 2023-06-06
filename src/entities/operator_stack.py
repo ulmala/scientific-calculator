@@ -1,4 +1,8 @@
-from constants import OPERATOR_PRECEDENCE, OPERATORS
+from constants import (
+    OPERATOR_PRECEDENCE,
+    OPERATORS,
+    SUPPORTED_FUNCTIONS
+)
 
 
 class OperatorStack:
@@ -12,6 +16,7 @@ class OperatorStack:
         self._stack = []
         self._operator_prec = OPERATOR_PRECEDENCE
         self._operators = OPERATORS
+        self._supported_functions = SUPPORTED_FUNCTIONS
 
     def __str__(self) -> str:
         """
@@ -76,3 +81,14 @@ class OperatorStack:
         if self.is_empty():
             return None
         return self._stack.pop()
+    
+    def function_at_top(self) -> bool:
+        """
+        Checks if the stack's top toke is a function
+
+        Returns:
+            bool: True if function, else False
+        """
+        if self.top_operator() in self._supported_functions:
+            return True
+        return False
