@@ -44,12 +44,15 @@ class TestParserService(unittest.TestCase):
         expression = Expression("+3-1")
         self.assertFalse(self.parser_service.validate_expression(expression))
 
-    def test_parse_to_tokens_parsers_expression_correctly(self):
-        expression = Expression("2+(10-1)")
-        correct_tokens = ["2", "+", "(", "10", "-", "1", ")"]
-        expression = self.parser_service.parse_to_tokens(expression)
-        tokens = expression.tokens()
-        self.assertEqual(correct_tokens, tokens)
+    def test_parse_to_tokens_parses_expressions_correctly(self):
+        expressions = [
+            (Expression("2+(10-1)"), ["2", "+", "(", "10", "-", "1", ")"]),
+            (Expression("sin(2/3*4)+max(1.1,2)"), ["sin", "(", "2", "/", "3", "*", "4", ")", "+", "max", "(", "1.1", ",", "2", ")"])
+        ]
+        for entry in expressions:
+            expression = self.parser_service.parse_to_tokens(entry[0])
+            tokens = expression.tokens()
+            self.assertEqual(entry[1], tokens)
 
     def test_parse_to_tokens_calls_set_tokens_with_correct_args(self):
         expression = Expression("1+1")
