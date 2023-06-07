@@ -103,7 +103,7 @@ class ParserService:
             Expression: expression object with tokens
         """
         escaped_functions = [re.escape(substring) for substring in SUPPORTED_FUNCTIONS]
-        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\/|\(|\)|\,|" + "|".join(escaped_functions) + ")"
+        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + "|".join(escaped_functions) + ")"
         tokens = re.findall(pattern, expression.raw_expression())
         expression.set_tokens(tokens)
         return expression
