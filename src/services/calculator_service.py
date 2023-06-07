@@ -181,8 +181,8 @@ class CalculatorService:
                     self._calculate_basic_operation(token, stack)
                 )
 
-        result = float(stack.pop())
-        return result
+        value = float(stack.pop())
+        return value
 
 
 calculator_service = CalculatorService()
