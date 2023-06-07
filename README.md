@@ -11,7 +11,7 @@ University of Helsinki course: Data structures and Algorithms Lab
 
 1. This project uses Poetry, install it before use. Installation guide [here](https://python-poetry.org/docs/#installation)
 
-2. Clone this repo or download the code, then `cd scientific-calculator``
+2. Clone this repo or download the code, then `cd scientific-calculator`
 
 3. Install required dependencies:
 
