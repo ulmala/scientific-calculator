@@ -54,3 +54,22 @@ class TestShuntingYardService(unittest.TestCase):
         self.assertEqual("-", from_queue)
         self.assertEqual(
             "+", self.shunting_yard_service._operator_stack.top_operator())
+
+    def test_run_converts_tokens_to_correct_postfix_format_1(self):
+        raw_expression = "3+4.2*2/(1-5)^2^3"
+        expression = Expression(raw_expression=raw_expression)
+        tokens = ["3", "+", "4.2", "*", "2", "/", "(", "1", "-", "5", ")", "^", "2", "^", "3"]
+        expression.set_tokens(tokens)
+        expression = self.shunting_yard_service.run(expression=expression)
+        correct_postfix = ["3", "4.2", "2", "*", "1", "5", "-", "2", "3", "^", "^", "/", "+"]
+        self.assertEqual(correct_postfix, expression.postfix())
+
+
+    def test_run_converts_tokens_to_correct_postfix_format_2(self):
+        raw_expression = "sin(max(2,3)/3*3.1)"
+        expression = Expression(raw_expression=raw_expression)
+        tokens = ["sin", "(", "max", "(", "2", ",", "3", ")", "/", "3", "*", "3.1", ")"]
+        expression.set_tokens(tokens)
+        expression = self.shunting_yard_service.run(expression=expression)
+        correct_postfix = ["2", "3", "max", "3", "/", "3.1", "*", "sin"]
+        self.assertEqual(correct_postfix, expression.postfix())
