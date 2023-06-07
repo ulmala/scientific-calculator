@@ -14,6 +14,25 @@ class ParserService:
             self._expression_starts_with_valid_token
         ]
 
+    def is_valid_variable_name(
+            self,
+            variable_name: str
+    ) -> bool:
+        if variable_name.isalpha() and \
+            variable_name not in SUPPORTED_FUNCTIONS:
+            return True
+        return False
+
+    def is_number(
+            self,
+            token: str
+    ) -> bool:
+        try:
+            float(token)
+            return True
+        except:
+            return False
+
     def _expression_starts_with_digit(
             self,
             expression: Expression
@@ -88,9 +107,28 @@ class ParserService:
                 return False
         return True
 
+    def _get_escaped_funcs_and_vars(
+            self,
+            variables: dict
+    ) -> list:
+        funcs_and_vars = list(SUPPORTED_FUNCTIONS.keys()) + list(variables.keys())
+        escaped_funcs_and_vars = [re.escape(substring) for substring in funcs_and_vars]
+        return escaped_funcs_and_vars
+
+    def _convert_variables_to_values(
+            self,
+            tokens: list,
+            variables: dict
+    ) -> list:
+        for i in range(len(tokens)):
+            if tokens[i] in variables:
+                tokens[i] = variables[tokens[i]]
+        return tokens
+
     def parse_to_tokens(
             self,
-            expression: Expression
+            expression: Expression,
+            variables: dict
     ) -> Expression:
         """
         Parse raw expression into list of tokens. Updates expression 
@@ -102,9 +140,10 @@ class ParserService:
         Returns:
             Expression: expression object with tokens
         """
-        escaped_functions = [re.escape(substring) for substring in SUPPORTED_FUNCTIONS]
-        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + "|".join(escaped_functions) + ")"
+        escaped_funcs_and_vars = self._get_escaped_funcs_and_vars(variables)
+        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + "|".join(escaped_funcs_and_vars) + ")"
         tokens = re.findall(pattern, expression.raw_expression())
+        tokens = self._convert_variables_to_values(tokens, variables)
         expression.set_tokens(tokens)
         return expression
 

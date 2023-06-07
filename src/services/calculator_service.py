@@ -26,6 +26,21 @@ class CalculatorService:
             shunting_yard_service (ShuntingYardService): Defaults to default_shunting_yard_service.
         """
         self._shunting_yard_service = shunting_yard_service
+        self._variables = {}
+
+    def add_variable(
+            self,
+            variable_name: str,
+            variable_value: str
+    ):
+        self._variables[variable_name] = variable_value
+
+    def variables(self) -> dict:
+        return self._variables
+
+    def print_variables(self):
+        for var_name, var_value in self._variables.items():
+            print(f"{var_name} = {var_value}")
 
     def solve(
             self,
