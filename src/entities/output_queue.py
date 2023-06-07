@@ -5,6 +5,7 @@ class OutputQueue:
     """
     Output queue used in Shunting Yard algorithm
     """
+
     def __init__(self) -> None:
         """
         Class constructor

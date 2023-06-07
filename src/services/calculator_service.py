@@ -11,10 +11,12 @@ from constants import (
     TWO_PARAMETER_FUNCTIONS
 )
 
+
 class CalculatorService:
     """
     Responsible for executing the high level calculation logic
     """
+
     def __init__(
             self,
             shunting_yard_service=default_shunting_yard_service
@@ -45,7 +47,7 @@ class CalculatorService:
     def solve(
             self,
             expression: Expression
-    ):  
+    ):
         """
         Solves the expression by:
         - converting the expression into postfix notation using
@@ -69,8 +71,10 @@ class CalculatorService:
     ) -> str:
         operand_1 = stack.pop()
         operand_2 = stack.pop()
-        if token == "^": token = "**"
-        return str(eval(operand_2 + token + operand_1)) # TODO: do this using ast; https://stackoverflow.com/questions/2371436/evaluating-a-mathematical-expression-in-a-string
+        if token == "^":
+            token = "**"
+        # TODO: do this using ast; https://stackoverflow.com/questions/2371436/evaluating-a-mathematical-expression-in-a-string
+        return str(eval(operand_2 + token + operand_1))
 
     def _calculate_one_parameter_function(
             self,
@@ -129,7 +133,7 @@ class CalculatorService:
         if token in ONE_PARAMETER_FUNCTIONS:
             return True
         return False
-    
+
     def _is_two_parameter_function(
             self,
             token: str
@@ -146,7 +150,7 @@ class CalculatorService:
         if token in TWO_PARAMETER_FUNCTIONS:
             return True
         return False
-    
+
     def _is_number(
             self,
             token: str

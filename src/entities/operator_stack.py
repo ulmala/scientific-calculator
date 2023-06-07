@@ -9,6 +9,7 @@ class OperatorStack:
     """
     Operator stack used in Shungting Yard algorithm
     """
+
     def __init__(self) -> None:
         """
         Class constructor
@@ -81,7 +82,7 @@ class OperatorStack:
         if self.is_empty():
             return None
         return self._stack.pop()
-    
+
     def function_at_top(self) -> bool:
         """
         Checks if the stack's top toke is a function

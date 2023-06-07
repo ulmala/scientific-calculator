@@ -14,6 +14,7 @@ class ShuntingYardService:
     """
     Class responsible for executing the Shungting Yard algorithm
     """
+
     def __init__(self) -> None:
         self._output_queue = OutputQueue()
         self._operator_stack = OperatorStack()
@@ -53,7 +54,7 @@ class ShuntingYardService:
         if token in self._operators:
             return True
         return False
-    
+
     def _is_number(
             self,
             token: str
@@ -63,7 +64,6 @@ class ShuntingYardService:
             return True
         except:
             return False
-
 
     def _is_function(
             self,

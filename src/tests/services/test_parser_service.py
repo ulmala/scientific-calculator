@@ -23,7 +23,7 @@ class TestParserService(unittest.TestCase):
             self.parser_service._expression_starts_with_left_paranthesis(valid_expression))
         self.assertFalse(self.parser_service._expression_starts_with_left_paranthesis(
             invalid_expression))
-    
+
     @unittest.skip(reason="not implemented")
     def test__expression_starts_with_valid_token(self):
         valid_expressions = [
@@ -49,7 +49,8 @@ class TestParserService(unittest.TestCase):
     def test_parse_to_tokens_parses_expressions_correctly(self):
         expressions = [
             (Expression("2+(10-1)"), ["2", "+", "(", "10", "-", "1", ")"]),
-            (Expression("sin(2/3*4)+max(1.1,2)"), ["sin", "(", "2", "/", "3", "*", "4", ")", "+", "max", "(", "1.1", ",", "2", ")"])
+            (Expression("sin(2/3*4)+max(1.1,2)"),
+             ["sin", "(", "2", "/", "3", "*", "4", ")", "+", "max", "(", "1.1", ",", "2", ")"])
         ]
         for entry in expressions:
             expression = self.parser_service.parse_to_tokens(entry[0])

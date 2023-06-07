@@ -6,14 +6,17 @@ from entities.expression import Expression
 class UI:
     def start(self):
         while True:
-            for _ in range(2): print("\n")
-            user_input = input("Type 'var' to declare new variable or 'exp' to submit expression: ")
+            for _ in range(2):
+                print("\n")
+            user_input = input(
+                "Type 'var' to declare new variable or 'exp' to submit expression: ")
             if user_input == "exp":
                 user_expression = input("Type your equation here: ")
                 expression = Expression(user_expression)
                 variables = calculator_service.variables()
                 parser_service.validate_expression(expression=expression)
-                expression = parser_service.parse_to_tokens(expression, variables=variables)
+                expression = parser_service.parse_to_tokens(
+                    expression, variables=variables)
                 result = calculator_service.solve(expression)
                 print(f"{' '.join(expression.tokens())} =", result)
 
@@ -27,8 +30,6 @@ class UI:
                     variable_value=str(result)
                 )
 
-
-
             if user_input == "var":
                 var_name = input("Variable name: ")
                 if not parser_service.is_valid_variable_name(var_name):
@@ -38,8 +39,8 @@ class UI:
                 if not parser_service.is_number(var_value):
                     print(f"{var_value} is not a valid variable value!")
                     continue
-                calculator_service.add_variable(variable_name=var_name, variable_value=var_value)
+                calculator_service.add_variable(
+                    variable_name=var_name, variable_value=var_value)
                 calculator_service.print_variables()
 
             input("\nPress any key to continue")
-

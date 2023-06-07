@@ -3,13 +3,14 @@ class Expression:
     Class to hold information of the experssion and it's
     different forms.
     """
+
     def __init__(
             self,
             raw_expression: str
     ) -> None:
         """
         Class constructor
-        
+
         Args:
             raw_expression (str): expression in raw string format
         """

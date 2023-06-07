@@ -4,6 +4,7 @@ from constants import (
     SUPPORTED_FUNCTIONS
 )
 
+
 class ParserService:
     """
     Responsible for parsing and validatig expressions
@@ -19,7 +20,7 @@ class ParserService:
             variable_name: str
     ) -> bool:
         if variable_name.isalpha() and \
-            variable_name not in SUPPORTED_FUNCTIONS:
+                variable_name not in SUPPORTED_FUNCTIONS:
             return True
         return False
 
@@ -111,8 +112,10 @@ class ParserService:
             self,
             variables: dict
     ) -> list:
-        funcs_and_vars = list(SUPPORTED_FUNCTIONS.keys()) + list(variables.keys())
-        escaped_funcs_and_vars = [re.escape(substring) for substring in funcs_and_vars]
+        funcs_and_vars = list(SUPPORTED_FUNCTIONS.keys()
+                              ) + list(variables.keys())
+        escaped_funcs_and_vars = [
+            re.escape(substring) for substring in funcs_and_vars]
         return escaped_funcs_and_vars
 
     def _convert_variables_to_values(
@@ -141,7 +144,8 @@ class ParserService:
             Expression: expression object with tokens
         """
         escaped_funcs_and_vars = self._get_escaped_funcs_and_vars(variables)
-        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + "|".join(escaped_funcs_and_vars) + ")"
+        pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + \
+            "|".join(escaped_funcs_and_vars) + ")"
         tokens = re.findall(pattern, expression.raw_expression())
         tokens = self._convert_variables_to_values(tokens, variables)
         expression.set_tokens(tokens)
