@@ -80,3 +80,15 @@ class TestValidationService(unittest.TestCase):
         expression = Expression("1+1)")
         with self.assertRaises(NotValidExpression):
             self.validation_service._matching_parantheses(expression)
+
+    def test_is_valid_variable_name_return_false_if_not_valid_variable_name(self):
+        self.assertFalse(self.validation_service.is_valid_variable_name("?"))
+        self.assertFalse(self.validation_service.is_valid_variable_name("a2"))
+        self.assertFalse(self.validation_service.is_valid_variable_name("2"))
+        self.assertFalse(self.validation_service.is_valid_variable_name("2a"))
+        self.assertFalse(self.validation_service.is_valid_variable_name("sin"))
+
+    def test_is_valid_variable_name_returns_true_if_valid_variable_name(self):
+        self.assertTrue(self.validation_service.is_valid_variable_name("a"))
+        self.assertTrue(self.validation_service.is_valid_variable_name("b"))
+        self.assertTrue(self.validation_service.is_valid_variable_name("ab"))

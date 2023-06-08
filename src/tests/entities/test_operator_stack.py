@@ -42,3 +42,6 @@ class TestOperatorStack(unittest.TestCase):
         self.operator_stack.push("+")
         self.operator_stack.push("-")
         self.assertEqual("['+', '-']", str(self.operator_stack))
+
+    def test_top_operator_returns_none_if_the_stack_is_empty(self):
+        self.assertIsNone(self.operator_stack.top_operator())

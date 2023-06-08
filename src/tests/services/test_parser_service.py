@@ -27,3 +27,19 @@ class TestParserService(unittest.TestCase):
         expression.set_tokens = MagicMock()
         self.parser_service.parse_to_tokens(expression, variables)
         expression.set_tokens.assert_called_once_with(["1", "+", "1"])
+
+    def test__convert_variables_to_values_returns_same_tokens_if_no_variables_defined(self):
+        tokens = ["1", "+", "1"]
+        variables = {}
+        self.assertEqual(
+            self.parser_service._convert_variables_to_values(tokens, variables),
+            tokens
+        )
+
+    def test__convert_variables_to_values_converts_variables_to_values_if_variables_defined(self):
+        tokens = ["a", "+", "1"]
+        variables = {"a": "2"}
+        self.assertEqual(
+            self.parser_service._convert_variables_to_values(tokens, variables),
+            ["2", "+", "1"]
+        )
