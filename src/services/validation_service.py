@@ -1,3 +1,4 @@
+import re
 from entities.expression import Expression
 from config import (
     SUPPORTED_FUNCTIONS,
@@ -6,6 +7,10 @@ from config import (
     OPERATORS,
     LEFT_ASSOCIATIVE_OPERATORS
 )
+
+
+class NotValidExpression(Exception):
+    pass
 
 
 class ValidationService:
@@ -41,6 +46,23 @@ class ValidationService:
             return True
         except:
             return False
+
+    def is_function(
+            self,
+            token: str
+    ) -> bool:
+        """
+        Checks if token is a supported function
+
+        Args:
+            token (str): token to be checked
+
+        Returns:
+            bool: True if supported operator, else False
+        """
+        if token in self._supported_functions:
+            return True
+        return False
 
     def is_one_parameter_function(
             self,
@@ -85,7 +107,7 @@ class ValidationService:
             return True
         return False
 
-    def expression_starts_with_digit(
+    def _expression_starts_with_number(
             self,
             expression: Expression
     ) -> bool:
@@ -98,11 +120,11 @@ class ValidationService:
         Returns:
             bool: True if starts with digit, else False
         """
-        if not expression.raw_expression()[0].isdigit():
+        if not self.is_number(expression.raw_expression()[0]):
             return False
         return True
 
-    def expression_starts_with_left_paranthesis(
+    def _expression_starts_with_left_paranthesis(
             self,
             expression: Expression
     ) -> bool:
@@ -119,6 +141,31 @@ class ValidationService:
             return True
         return False
 
+    def _expression_starts_with_alphabet(
+            self,
+            expression: Expression
+    ) -> bool:
+        """
+        Checks if raw expression starts with alphabet
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Returns:
+            bool: True if starts with alphabet, else False
+        """
+        if expression.raw_expression()[0].isalpha():
+            return True
+        return False
+
+    def _expression_starts_with_plus_or_minus(
+            self,
+            expression: Expression
+    ) -> bool:
+        if expression.raw_expression()[0] in ["+", "-"]:
+            return True
+        return False
+
     def _expression_starts_with_valid_token(
             self,
             expression: Expression
@@ -132,35 +179,46 @@ class ValidationService:
         Returns:
             bool: True if valid token, else False
         """
-        # if self._expression_starts_with_digit(expression):
-        #     return True
-        # if self._expression_starts_with_left_paranthesis(expression):
-        #     return True
-        # if self._expression_starts_with_function(expression):
-        #     return True
-        # return False
-        return True
+        validations = [
+            self._expression_starts_with_number,
+            self._expression_starts_with_left_paranthesis,
+            self._expression_starts_with_alphabet,
+            self._expression_starts_with_plus_or_minus
+        ]
+        if all(validation(expression) == False for validation in validations):
+            raise NotValidExpression("Expression starts with illegal token!")
+
+    def _matching_parantheses(
+            self,
+            expression: Expression
+    ):
+        """
+        Checks if expression has same amount of left and
+        right parantheses.
+
+        Args:
+            expression (Expression): expression to be validated
+
+        Raises:
+            NotValidExpression: if mismatching parantheses
+        """
+        left_parantheses = len(re.findall(r"\(", expression.raw_expression()))
+        right_parantheses = len(re.findall(r"\)", expression.raw_expression()))
+        if left_parantheses != right_parantheses:
+            raise NotValidExpression("Wrong amount of parantheses!")
 
     def validate_expression(
             self,
             expression: Expression
-    ) -> bool:
+    ):
         """
-        Runs all expression validations.
+        Runs all validations.
 
         Args:
-            expression (Expression): expression object validate
-
-        Returns:
-            bool: True if valid expression, else False
+            expression (Expression): expression to be validated
         """
-        validations = [
-            self._expression_starts_with_valid_token
-        ]
-        for validation in validations:
-            if not validation(expression):
-                return False
-        return True
+        self._matching_parantheses(expression)
+        self._expression_starts_with_valid_token(expression)
 
     def is_operator(
             self,
@@ -176,23 +234,6 @@ class ValidationService:
             bool: True if operator, else False
         """
         if token in self._operators:
-            return True
-        return False
-
-    def is_function(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if token is a supported function
-
-        Args:
-            token (str): token to be checked
-
-        Returns:
-            bool: True if supported operator, else False
-        """
-        if token in self._supported_functions:
             return True
         return False
 
