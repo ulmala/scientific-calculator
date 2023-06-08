@@ -72,6 +72,7 @@ class CalculatorService:
             variables=self.variables()
         )
         expression = self._shunting_yard_service.run(expression)
+        self._shunting_yard_service.clear_stack_and_queue()
         result = self._evaluate_postfix_notation(expression.postfix())
         return result
 
