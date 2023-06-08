@@ -3,11 +3,19 @@
 <ins>6.6.</ins>  
 Time spent: 3 hours  
 
-- add functionality to use functions
+- added functionality to use functions
 
 <ins>7.6.</ins>  
 Time spent: 2 hours
 
-- add installation guide
-- add tests
+- added installation guide
+- added tests
 - support for user defined variables and functionality to save expression value to variable
+
+<ins>8.6.</ins>  
+Time spent: 3 hours
+
+- refactored all validation methods to `ValidationService` class
+- added tests
+- added validations for user expressions
+- user will be prompted with error message if expression validations are not passed
