@@ -47,6 +47,8 @@ class OperatorStack:
         Returns:
             str: operator
         """
+        if self.is_empty():
+            return None
         return self._stack[-1]
 
     def top_operator_precedence(self) -> int:
@@ -90,6 +92,8 @@ class OperatorStack:
         Returns:
             bool: True if function, else False
         """
+        # if self.is_empty():
+        # return False
         if self.top_operator() in self._supported_functions:
             return True
         return False
