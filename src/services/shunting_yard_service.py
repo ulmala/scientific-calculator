@@ -2,16 +2,11 @@ from entities.expression import Expression
 from entities.operator_stack import OperatorStack
 from entities.output_queue import OutputQueue
 
-from services.validation_service import(
+from services.validation_service import (
     validation_service as default_validation_service
 )
 
-from config import (
-    OPERATOR_PRECEDENCE,
-    OPERATORS,
-    LEFT_ASSOCIATIVE_OPERATORS,
-    SUPPORTED_FUNCTIONS
-)
+from config import OPERATOR_PRECEDENCE
 
 
 class ShuntingYardService:
@@ -55,7 +50,7 @@ class ShuntingYardService:
         print("stack: ", self._operator_stack)
         print("output queue: ", self._output_queue)
         print("next token to be handled: ", token)
-        #input()
+        # input()
 
     def run(
             self,

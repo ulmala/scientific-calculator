@@ -15,7 +15,7 @@ class TestValidationService(unittest.TestCase):
             self.validation_service.expression_starts_with_digit(valid_expression))
         self.assertFalse(
             self.validation_service.expression_starts_with_digit(invalid_expression))
-        
+
     def test_expression_starts_with_left_paranthesis(self):
         valid_expression = Expression("(1+1)")
         invalid_expression = Expression("1+1")
@@ -23,7 +23,7 @@ class TestValidationService(unittest.TestCase):
             self.validation_service.expression_starts_with_left_paranthesis(valid_expression))
         self.assertFalse(self.validation_service.expression_starts_with_left_paranthesis(
             invalid_expression))
-        
+
     @unittest.skip(reason="not implemented")
     def test__expression_starts_with_valid_token(self):
         valid_expressions = [
@@ -36,15 +36,17 @@ class TestValidationService(unittest.TestCase):
                 self.validation_service._expression_starts_with_valid_token(valid_expression))
         self.assertFalse(
             self.validation_service._expression_starts_with_valid_token(invalid_expression))
-        
+
     def test_validate_expression_returns_true_if_all_validations_passed(self):
         expression = Expression("(1+1)")
-        self.assertTrue(self.validation_service.validate_expression(expression))
+        self.assertTrue(
+            self.validation_service.validate_expression(expression))
 
     @unittest.skip(reason="not implemented")
     def test_validate_expression_returns_false_if_any_validation_fails(self):
         expression = Expression("+3-1")
-        self.assertFalse(self.validation_service.validate_expression(expression))
+        self.assertFalse(
+            self.validation_service.validate_expression(expression))
 
     def test__is_operator_returns_true_if_operator(self):
         self.assertTrue(self.validation_service.is_operator("-"))

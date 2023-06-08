@@ -14,16 +14,12 @@ class UI:
             if user_input == "exp":
                 user_expression = input("Type your equation here: ")
                 expression = Expression(user_expression)
-                variables = calculator_service.variables()
-                validation_service.validate_expression(expression=expression)
-                expression = parser_service.parse_to_tokens(
-                    expression, variables=variables)
                 result = calculator_service.solve(expression)
                 print(f"{' '.join(expression.tokens())} =", result)
 
                 user_input = input(
-                    """Do you want to save the result to variable?\n
-                        Press enter to continue, else write variable name: """)
+                    "Do you want to save the result to variable? Press enter to continue, else write variable name: "
+                )
                 if user_input == "":
                     continue
                 calculator_service.add_variable(

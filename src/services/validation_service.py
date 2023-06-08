@@ -7,6 +7,7 @@ from config import (
     LEFT_ASSOCIATIVE_OPERATORS
 )
 
+
 class ValidationService:
     def __init__(
             self,
@@ -57,7 +58,7 @@ class ValidationService:
         if token in self._one_parameter_functions:
             return True
         return False
-    
+
     def is_two_parameter_function(
             self,
             token: str
@@ -74,7 +75,7 @@ class ValidationService:
         if token in self._two_parameter_functions:
             return True
         return False
-    
+
     def is_valid_variable_name(
             self,
             variable_name: str
@@ -83,7 +84,6 @@ class ValidationService:
                 variable_name not in self._supported_functions:
             return True
         return False
-    
 
     def expression_starts_with_digit(
             self,
@@ -101,7 +101,7 @@ class ValidationService:
         if not expression.raw_expression()[0].isdigit():
             return False
         return True
-    
+
     def expression_starts_with_left_paranthesis(
             self,
             expression: Expression
@@ -118,7 +118,7 @@ class ValidationService:
         if expression.raw_expression()[0] == "(":
             return True
         return False
-    
+
     def _expression_starts_with_valid_token(
             self,
             expression: Expression
@@ -140,7 +140,7 @@ class ValidationService:
         #     return True
         # return False
         return True
-    
+
     def validate_expression(
             self,
             expression: Expression
@@ -161,7 +161,7 @@ class ValidationService:
             if not validation(expression):
                 return False
         return True
-    
+
     def is_operator(
             self,
             token: str
@@ -178,7 +178,7 @@ class ValidationService:
         if token in self._operators:
             return True
         return False
-    
+
     def is_function(
             self,
             token: str
@@ -195,7 +195,7 @@ class ValidationService:
         if token in self._supported_functions:
             return True
         return False
-    
+
     def is_left_associative(
             self,
             token: str
@@ -212,5 +212,6 @@ class ValidationService:
         if token in self._left_associative_operators:
             return True
         return False
-    
+
+
 validation_service = ValidationService()

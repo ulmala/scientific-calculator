@@ -16,7 +16,8 @@ class TestParserService(unittest.TestCase):
         ]
         variables = {}
         for entry in expressions:
-            expression = self.parser_service.parse_to_tokens(entry[0], variables)
+            expression = self.parser_service.parse_to_tokens(
+                entry[0], variables)
             tokens = expression.tokens()
             self.assertEqual(entry[1], tokens)
 

@@ -9,6 +9,7 @@ class ParserService:
     """
     Responsible for parsing and validatig expressions
     """
+
     def _get_escaped_funcs_and_vars(
             self,
             variables: dict

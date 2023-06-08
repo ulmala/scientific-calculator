@@ -1,5 +1,3 @@
-import math
-from ast import literal_eval
 from entities.expression import Expression
 from services.shunting_yard_service import (
     shunting_yard_service as default_shunting_yard_service
@@ -7,11 +5,12 @@ from services.shunting_yard_service import (
 from services.validation_service import (
     validation_service as default_validation_service
 )
+from services.parser_service import (
+    parser_service as default_parser_service
+)
 
 from config import (
-    SUPPORTED_FUNCTIONS,
-    ONE_PARAMETER_FUNCTIONS,
-    TWO_PARAMETER_FUNCTIONS
+    SUPPORTED_FUNCTIONS
 )
 
 
@@ -23,7 +22,8 @@ class CalculatorService:
     def __init__(
             self,
             shunting_yard_service=default_shunting_yard_service,
-            validation_service=default_validation_service
+            validation_service=default_validation_service,
+            parser_service=default_parser_service
     ) -> None:
         """
         Class constructor
@@ -33,6 +33,7 @@ class CalculatorService:
         """
         self._shunting_yard_service = shunting_yard_service
         self._validation_service = validation_service
+        self._parser_service = parser_service
         self._variables = {}
 
     def add_variable(
@@ -65,6 +66,11 @@ class CalculatorService:
         Returns:
             float: value of the expression
         """
+        self._validation_service.validate_expression(expression)
+        expression = self._parser_service.parse_to_tokens(
+            expression=expression,
+            variables=self.variables()
+        )
         expression = self._shunting_yard_service.run(expression)
         result = self._evaluate_postfix_notation(expression.postfix())
         return result
