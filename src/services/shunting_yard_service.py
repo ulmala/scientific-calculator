@@ -23,6 +23,10 @@ class ShuntingYardService:
         self._operator_prec = OPERATOR_PRECEDENCE
         self._validation_service = default_validation_service
 
+    def clear_stack_and_queue(self):
+        self._output_queue = OutputQueue()
+        self._operator_stack = OperatorStack()
+
     def _operator_precedence(
             self,
             token: str
