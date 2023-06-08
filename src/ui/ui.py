@@ -1,6 +1,7 @@
 from services.calculator_service import calculator_service
 from services.parser_service import parser_service
 from services.validation_service import validation_service
+from services.validation_service import NotValidExpression
 from entities.expression import Expression
 
 
@@ -14,7 +15,12 @@ class UI:
             if user_input == "exp":
                 user_expression = input("Type your equation here: ")
                 expression = Expression(user_expression)
-                result = calculator_service.solve(expression)
+                try:
+                    result = calculator_service.solve(expression)
+                except NotValidExpression as e:
+                    print(f"*!*!*!*!*!*! {e} *!*!*!*!*!*!")
+                    continue
+
                 print(f"{' '.join(expression.tokens())} =", result)
 
                 user_input = input(
