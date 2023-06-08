@@ -25,9 +25,9 @@ class ParserService:
             tokens: list,
             variables: dict
     ) -> list:
-        for i in range(len(tokens)):
-            if tokens[i] in variables:
-                tokens[i] = variables[tokens[i]]
+        for i, token in enumerate(tokens):
+            if token in variables:
+                tokens[i] = variables[token]
         return tokens
 
     def parse_to_tokens(
