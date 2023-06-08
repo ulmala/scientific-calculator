@@ -1,4 +1,4 @@
-from constants import (
+from config import (
     OPERATOR_PRECEDENCE,
     OPERATORS,
     SUPPORTED_FUNCTIONS

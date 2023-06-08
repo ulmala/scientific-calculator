@@ -1,5 +1,6 @@
 from services.calculator_service import calculator_service
 from services.parser_service import parser_service
+from services.validation_service import validation_service
 from entities.expression import Expression
 
 
@@ -14,7 +15,7 @@ class UI:
                 user_expression = input("Type your equation here: ")
                 expression = Expression(user_expression)
                 variables = calculator_service.variables()
-                parser_service.validate_expression(expression=expression)
+                validation_service.validate_expression(expression=expression)
                 expression = parser_service.parse_to_tokens(
                     expression, variables=variables)
                 result = calculator_service.solve(expression)
@@ -32,11 +33,11 @@ class UI:
 
             if user_input == "var":
                 var_name = input("Variable name: ")
-                if not parser_service.is_valid_variable_name(var_name):
+                if not validation_service.is_valid_variable_name(var_name):
                     print(f"{var_name} is not a valid variable name!")
                     continue
                 var_value = input("Variable value: ")
-                if not parser_service.is_number(var_value):
+                if not validation_service.is_number(var_value):
                     print(f"{var_value} is not a valid variable value!")
                     continue
                 calculator_service.add_variable(

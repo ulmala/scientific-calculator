@@ -26,25 +26,6 @@ class TestShuntingYardService(unittest.TestCase):
             self.shunting_yard_service._operator_precedence("*")
         )
 
-    def test__is_operator_returns_true_if_operator(self):
-        self.assertTrue(self.shunting_yard_service._is_operator("-"))
-        self.assertTrue(self.shunting_yard_service._is_operator("+"))
-        self.assertTrue(self.shunting_yard_service._is_operator("/"))
-        self.assertTrue(self.shunting_yard_service._is_operator("*"))
-
-    def test__is_operator_returns_false_if_not_operator(self):
-        self.assertFalse(self.shunting_yard_service._is_operator("2"))
-        self.assertFalse(self.shunting_yard_service._is_operator("200"))
-
-    def test__is_left_associative_returns_true_if_operator_left_associative(self):
-        self.assertTrue(self.shunting_yard_service._is_left_associative("-"))
-        self.assertTrue(self.shunting_yard_service._is_left_associative("+"))
-        self.assertTrue(self.shunting_yard_service._is_left_associative("/"))
-        self.assertTrue(self.shunting_yard_service._is_left_associative("*"))
-
-    def test__is_left_associative_returns_false_if_operator_not_left_associative(self):
-        self.assertFalse(self.shunting_yard_service._is_left_associative("^"))
-
     def test__pop_from_stack_to_queue_pops_operator_to_queue(self):
         self.shunting_yard_service._operator_stack.push("+")
         self.shunting_yard_service._operator_stack.push("-")

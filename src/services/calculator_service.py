@@ -4,8 +4,11 @@ from entities.expression import Expression
 from services.shunting_yard_service import (
     shunting_yard_service as default_shunting_yard_service
 )
+from services.validation_service import (
+    validation_service as default_validation_service
+)
 
-from constants import (
+from config import (
     SUPPORTED_FUNCTIONS,
     ONE_PARAMETER_FUNCTIONS,
     TWO_PARAMETER_FUNCTIONS
@@ -19,7 +22,8 @@ class CalculatorService:
 
     def __init__(
             self,
-            shunting_yard_service=default_shunting_yard_service
+            shunting_yard_service=default_shunting_yard_service,
+            validation_service=default_validation_service
     ) -> None:
         """
         Class constructor
@@ -28,6 +32,7 @@ class CalculatorService:
             shunting_yard_service (ShuntingYardService): Defaults to default_shunting_yard_service.
         """
         self._shunting_yard_service = shunting_yard_service
+        self._validation_service = validation_service
         self._variables = {}
 
     def add_variable(
@@ -117,59 +122,6 @@ class CalculatorService:
         result = SUPPORTED_FUNCTIONS[token](float(operand_1), float(operand_2))
         return str(result)
 
-    def _is_one_parameter_function(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if the function is one parameter function.
-
-        Args:
-            token (str): token to be validated
-
-        Returns:
-            bool: True if one parameter function, else False
-        """
-        if token in ONE_PARAMETER_FUNCTIONS:
-            return True
-        return False
-
-    def _is_two_parameter_function(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if the function is two parameter function.
-
-        Args:
-            token (str): token to be validated
-
-        Returns:
-            bool: True if two parameter function, else False
-        """
-        if token in TWO_PARAMETER_FUNCTIONS:
-            return True
-        return False
-
-    def _is_number(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if given token is number
-
-        Args:
-            token (str): token to be validated
-
-        Returns:
-            bool: True if number, else False
-        """
-        try:
-            float(token)
-            return True
-        except:
-            return False
-
     def _evaluate_postfix_notation(
             self,
             postfix_notation: list
@@ -185,13 +137,13 @@ class CalculatorService:
         """
         stack = []
         for token in postfix_notation:
-            if self._is_number(token):
+            if self._validation_service.is_number(token):
                 stack.append(token)
-            elif self._is_one_parameter_function(token):
+            elif self._validation_service.is_one_parameter_function(token):
                 stack.append(
                     self._calculate_one_parameter_function(token, stack)
                 )
-            elif self._is_two_parameter_function(token):
+            elif self._validation_service.is_two_parameter_function(token):
                 stack.append(
                     self._calculate_two_parameter_function(token, stack)
                 )

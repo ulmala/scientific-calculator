@@ -2,7 +2,11 @@ from entities.expression import Expression
 from entities.operator_stack import OperatorStack
 from entities.output_queue import OutputQueue
 
-from constants import (
+from services.validation_service import(
+    validation_service as default_validation_service
+)
+
+from config import (
     OPERATOR_PRECEDENCE,
     OPERATORS,
     LEFT_ASSOCIATIVE_OPERATORS,
@@ -15,13 +19,14 @@ class ShuntingYardService:
     Class responsible for executing the Shungting Yard algorithm
     """
 
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            validation_service=default_validation_service
+    ) -> None:
         self._output_queue = OutputQueue()
         self._operator_stack = OperatorStack()
         self._operator_prec = OPERATOR_PRECEDENCE
-        self._operators = OPERATORS
-        self._left_associative_operators = LEFT_ASSOCIATIVE_OPERATORS
-        self._supported_functions = SUPPORTED_FUNCTIONS
+        self._validation_service = default_validation_service
 
     def _operator_precedence(
             self,
@@ -38,67 +43,6 @@ class ShuntingYardService:
         """
         return self._operator_prec[token]
 
-    def _is_operator(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if token is an operators
-
-        Args:
-            token (str): token to be checked
-
-        Returns:
-            bool: True if operator, else False
-        """
-        if token in self._operators:
-            return True
-        return False
-
-    def _is_number(
-            self,
-            token: str
-    ) -> bool:
-        try:
-            float(token)
-            return True
-        except:
-            return False
-
-    def _is_function(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if token is a supported function
-
-        Args:
-            token (str): token to be checked
-
-        Returns:
-            bool: True if supported operator, else False
-        """
-        if token in self._supported_functions:
-            return True
-        return False
-
-    def _is_left_associative(
-            self,
-            token: str
-    ) -> bool:
-        """
-        Checks if operator is left associative
-
-        Args:
-            token (str): operator to be checked
-
-        Returns:
-            bool: True if left associative, else False
-        """
-        if token in self._left_associative_operators:
-            return True
-        return False
-
     def _pop_from_stack_to_queue(self):
         """
         Pop operator from stack into output queue
@@ -111,7 +55,7 @@ class ShuntingYardService:
         print("stack: ", self._operator_stack)
         print("output queue: ", self._output_queue)
         print("next token to be handled: ", token)
-        input()
+        #input()
 
     def run(
             self,
@@ -127,15 +71,15 @@ class ShuntingYardService:
             self._print_status(token)
 
             # if token is a number: put it into the output queue
-            if self._is_number(token):
+            if self._validation_service.is_number(token):
                 self._output_queue.put(token)
 
             # if token is a function: push it onto the operator stack
-            if self._is_function(token):
+            if self._validation_service.is_function(token):
                 self._operator_stack.push(token)
 
             # if token is an operator:
-            elif self._is_operator(token):
+            elif self._validation_service.is_operator(token):
                 # while (
                 # there is an operator o2 at the top of the operator stack which is not a left parenthesis,
                 # and (o2 has greater precedence than o1 or (o1 and o2 have the same precedence and o1 is left-associative))
@@ -144,7 +88,7 @@ class ShuntingYardService:
                     while self._operator_stack.top_operator() != "(" and (
                             self._operator_stack.top_operator_precedence() > self._operator_precedence(token) or
                             (self._operator_stack.top_operator_precedence() == self._operator_precedence(
-                                token) and self._is_left_associative(token))
+                                token) and self._validation_service.is_left_associative(token))
                     ):
                         # pop o2 from the operator stack into the output queue
                         self._pop_from_stack_to_queue()
