@@ -214,6 +214,7 @@ class ValidationService:
         """
         Runs all validations.
 
+        TODO: validate that expression does not contain undefined variables
         Args:
             expression (Expression): expression to be validated
         """
