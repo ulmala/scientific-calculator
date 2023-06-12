@@ -48,9 +48,9 @@ class ParserService:
         escaped_funcs_and_vars = self._get_escaped_funcs_and_vars(variables)
         pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + \
             "|".join(escaped_funcs_and_vars) + ")"
-        tokens = re.findall(pattern, expression.raw_expression())
+        tokens = re.findall(pattern, expression.raw_expression)
         tokens = self._convert_variables_to_values(tokens, variables)
-        expression.set_tokens(tokens)
+        expression.tokens = tokens
         return expression
 
 

@@ -21,7 +21,7 @@ class UI:
                     print(f"*!*!*!*!*!*! {e} *!*!*!*!*!*!")
                     continue
 
-                print(f"{' '.join(expression.tokens())} =", result)
+                print(f"{' '.join(expression.tokens)} =", result)
 
                 user_input = input(
                     "Do you want to save the result to variable? Press enter to continue, else write variable name: "

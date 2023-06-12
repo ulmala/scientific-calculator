@@ -120,7 +120,7 @@ class ValidationService:
         Returns:
             bool: True if starts with digit, else False
         """
-        if not self.is_number(expression.raw_expression()[0]):
+        if not self.is_number(expression.raw_expression[0]):
             return False
         return True
 
@@ -137,7 +137,7 @@ class ValidationService:
         Returns:
             bool: True if starts with '(' , else False
         """
-        if expression.raw_expression()[0] == "(":
+        if expression.raw_expression[0] == "(":
             return True
         return False
 
@@ -154,7 +154,7 @@ class ValidationService:
         Returns:
             bool: True if starts with alphabet, else False
         """
-        if expression.raw_expression()[0].isalpha():
+        if expression.raw_expression[0].isalpha():
             return True
         return False
 
@@ -162,7 +162,7 @@ class ValidationService:
             self,
             expression: Expression
     ) -> bool:
-        if expression.raw_expression()[0] in ["+", "-"]:
+        if expression.raw_expression[0] in ["+", "-"]:
             return True
         return False
 
@@ -202,8 +202,8 @@ class ValidationService:
         Raises:
             NotValidExpression: if mismatching parantheses
         """
-        left_parantheses = len(re.findall(r"\(", expression.raw_expression()))
-        right_parantheses = len(re.findall(r"\)", expression.raw_expression()))
+        left_parantheses = len(re.findall(r"\(", expression.raw_expression))
+        right_parantheses = len(re.findall(r"\)", expression.raw_expression))
         if left_parantheses != right_parantheses:
             raise NotValidExpression("Wrong amount of parantheses!")
 

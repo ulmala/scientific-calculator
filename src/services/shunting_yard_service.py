@@ -63,7 +63,7 @@ class ShuntingYardService:
         """
         The algorithm
         """
-        tokens = expression.tokens()
+        tokens = expression.tokens
 
         # while there are tokens to be read:
         for token in tokens:
@@ -139,7 +139,7 @@ class ShuntingYardService:
         print("stack:", self._operator_stack)
         print("queue: ", self._output_queue)
 
-        expression.set_postfix(self._output_queue.as_list())
+        expression.postfix = self._output_queue.as_list()
         return expression
 
 

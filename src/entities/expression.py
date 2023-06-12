@@ -21,11 +21,12 @@ class Expression:
 
     def __str__(self) -> str:
         """String representation of the object"""
-        raw_expression = f"raw expression: {self._raw_expression}"
-        tokens = f"tokens: {self._tokens}"
-        postfix = f"postfix notation: {self._postfix_notation}"
+        raw_expression = f"raw expression: {self.raw_expression}"
+        tokens = f"tokens: {self.tokens}"
+        postfix = f"postfix notation: {self.postfix}"
         return f"{raw_expression}\n{tokens}\n{postfix}"
 
+    @property
     def raw_expression(self) -> str:
         """
         Returns raw expression as string
@@ -35,6 +36,14 @@ class Expression:
         """
         return self._raw_expression
 
+    @raw_expression.setter
+    def raw_expression(
+        self,
+        raw_expression: str
+    ):
+        self._raw_expression = raw_expression
+
+    @property
     def tokens(self) -> list:
         """
         Returns expression tokens as list
@@ -44,7 +53,8 @@ class Expression:
         """
         return self._tokens
 
-    def set_tokens(
+    @tokens.setter
+    def tokens(
             self,
             tokens: list
     ):
@@ -56,7 +66,18 @@ class Expression:
         """
         self._tokens = tokens
 
-    def set_postfix(
+    @property
+    def postfix(self) -> list:
+        """
+        Returns expression's postfix notation as list
+
+        Returns:
+            list: postfix notation
+        """
+        return self._postfix_notation
+
+    @postfix.setter
+    def postfix(
             self,
             notation: list
     ):
@@ -69,16 +90,12 @@ class Expression:
         """
         self._postfix_notation = notation
 
-    def postfix(self) -> list:
-        """
-        Returns expression's postfix notation as list
+    @property
+    def value(self) -> float:
+        return self._value
 
-        Returns:
-            list: postfix notation
-        """
-        return self._postfix_notation
-
-    def set_value(
+    @value.setter
+    def value(
             self,
             value: float
     ):
