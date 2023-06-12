@@ -40,3 +40,11 @@ class TestExpression(unittest.TestCase):
         self.expression._postfix_notation = ["+", "1", "1"]
         correct_str = f"raw expression: 1+1\ntokens: ['1', '+', '1']\npostfix notation: ['+', '1', '1']"
         self.assertEqual(correct_str, str(self.expression))
+
+    def test_raw_expression_setter_sets_value_to_correct_variable(self):
+        self.expression.raw_expression = "2+2"
+        self.assertEqual("2+2", self.expression.raw_expression)
+
+    def test_property_value_returns_correct_value(self):
+        self.expression.value = 0.0
+        self.assertEqual(0.0, self.expression.value)

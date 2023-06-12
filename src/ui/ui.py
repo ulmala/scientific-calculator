@@ -44,6 +44,6 @@ class UI:
                     continue
                 calculator_service.add_variable(
                     variable_name=var_name, variable_value=var_value)
-                calculator_service.print_variables()
+                print(calculator_service.get_variables_as_string())
 
             input("\nPress any key to continue")

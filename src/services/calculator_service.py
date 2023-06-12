@@ -43,12 +43,15 @@ class CalculatorService:
     ):
         self._variables[variable_name] = variable_value
 
+    @property
     def variables(self) -> dict:
         return self._variables
 
-    def print_variables(self):
+    def get_variables_as_string(self):
+        var_str = []
         for var_name, var_value in self._variables.items():
-            print(f"{var_name} = {var_value}")
+            var_str.append(f"{var_name} = {var_value}")
+        return "\n".join(var_str)
 
     def solve(
             self,
@@ -69,11 +72,11 @@ class CalculatorService:
         self._validation_service.validate_expression(expression)
         expression = self._parser_service.parse_to_tokens(
             expression=expression,
-            variables=self.variables()
+            variables=self.variables
         )
         expression = self._shunting_yard_service.run(expression)
         self._shunting_yard_service.clear_stack_and_queue()
-        result = self._evaluate_postfix_notation(expression.postfix())
+        result = self._evaluate_postfix_notation(expression.postfix)
         return result
 
     def _calculate_basic_operation(
