@@ -62,7 +62,8 @@ class TestCalculatorService(unittest.TestCase):
             variable_value=3
         )
         correct_str = "a = 2\nb = 3"
-        self.assertEqual(self.calculator_service.get_variables_as_string(), correct_str)
+        self.assertEqual(
+            self.calculator_service.get_variables_as_string(), correct_str)
 
     def test_solve_calls_all_other_functions_with_correct_arguments(self):
         expression = Expression("2 + 3 * 4")
@@ -71,19 +72,23 @@ class TestCalculatorService(unittest.TestCase):
         self.calculator_service._parser_service = MagicMock()
         self.calculator_service._shunting_yard_service = MagicMock()
         self.calculator_service._evaluate_postfix_notation = MagicMock()
-        self.calculator_service._parser_service.parse_to_tokens.return_value = ["2", "+", "3", "*", "4"]
+        self.calculator_service._parser_service.parse_to_tokens.return_value = [
+            "2", "+", "3", "*", "4"]
         self.calculator_service._shunting_yard_service.run.return_value = expression
         self.calculator_service._evaluate_postfix_notation.return_value = 14.0
 
         result = self.calculator_service.solve(expression)
 
-        self.calculator_service._validation_service.validate_expression.assert_called_once_with(expression)
+        self.calculator_service._validation_service.validate_expression.assert_called_once_with(
+            expression)
         self.calculator_service._parser_service.parse_to_tokens.assert_called_once_with(
             expression=expression,
             variables=self.calculator_service.variables
         )
-        self.calculator_service._shunting_yard_service.run.assert_called_once_with(["2", "+", "3", "*", "4"])
+        self.calculator_service._shunting_yard_service.run.assert_called_once_with([
+                                                                                   "2", "+", "3", "*", "4"])
         self.calculator_service._shunting_yard_service.clear_stack_and_queue.assert_called_once()
-        self.calculator_service._evaluate_postfix_notation.assert_called_once_with(["2", "3", "4", "*", "+"])
+        self.calculator_service._evaluate_postfix_notation.assert_called_once_with([
+                                                                                   "2", "3", "4", "*", "+"])
 
         self.assertEqual(result, 14.0)
