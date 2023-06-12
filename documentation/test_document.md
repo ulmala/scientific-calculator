@@ -14,3 +14,5 @@ Current test coverage:
 |                               **TOTAL** |  **271** |   **17** |   **77** |    **6** | **93%** |
   
 More detailed report can be created running `poetry run invoke coverage-report`.  
+
+Algorithm's calculation precision is tested in [test_shunting_yard_service.py](../src/tests/services/test_shunting_yard_service.py)
