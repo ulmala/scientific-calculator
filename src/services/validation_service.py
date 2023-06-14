@@ -213,6 +213,25 @@ class ValidationService:
     ):
         if len(expression.raw_expression) == 0:
             raise NotValidExpression("Expression can't be empty!")
+        
+    def _correct_power_operator(
+            self,
+            expression: Expression
+    ):
+        if "**" in expression.raw_expression:
+            raise NotValidExpression(
+                "'**' is not a valid power operator! Use '^' instead"
+            )
+        
+    def _check_if_no_consecutive_operators(
+            self,
+            expression: Expression
+    ):
+        pattern = r"(?:\+\+|--|\*\*|//|[+\-*/]){2,}"
+        if re.search(pattern, expression.raw_expression):
+            raise NotValidExpression(
+                "Consecutive operators are illegal!"
+            )
 
     def validate_expression(
             self,
@@ -226,6 +245,8 @@ class ValidationService:
             expression (Expression): expression to be validated
         """
         self._expression_is_not_empty(expression)
+        self._correct_power_operator(expression)
+        self._check_if_no_consecutive_operators(expression)
         self._matching_parantheses(expression)
         self._expression_starts_with_valid_token(expression)
 
@@ -262,6 +283,25 @@ class ValidationService:
         if token in self._left_associative_operators:
             return True
         return False
+
+    def check_if_tokens_are_not_dropped(
+            self,
+            tokens: list,
+            expression: Expression
+    ):
+        """
+        Validates parsed token
+
+        Args:
+            tokens (list): _description_
+            expression (Expression): _description_
+
+        Raises:
+            NotValidExpression: _description_
+        """
+        if len(expression.raw_expression) != len("".join(tokens)):
+            raise NotValidExpression("Not a valid expression!")
+
 
 
 validation_service = ValidationService()
