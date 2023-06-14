@@ -206,6 +206,13 @@ class ValidationService:
         right_parantheses = len(re.findall(r"\)", expression.raw_expression))
         if left_parantheses != right_parantheses:
             raise NotValidExpression("Wrong amount of parantheses!")
+        
+    def _expression_is_not_empty(
+            self,
+            expression: Expression
+    ):
+        if len(expression.raw_expression) == 0:
+            raise NotValidExpression("Expression can't be empty!")
 
     def validate_expression(
             self,
@@ -218,6 +225,7 @@ class ValidationService:
         Args:
             expression (Expression): expression to be validated
         """
+        self._expression_is_not_empty(expression)
         self._matching_parantheses(expression)
         self._expression_starts_with_valid_token(expression)
 
