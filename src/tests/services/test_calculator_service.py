@@ -1,9 +1,11 @@
-import math
 import unittest
+from math import sin
 from unittest.mock import MagicMock, patch
 from entities.expression import Expression
 from services.calculator_service import CalculatorService, calculator_service
 
+class NotValidExpression(Exception):
+    pass
 
 class TestCalculatorService(unittest.TestCase):
     def setUp(self):
@@ -29,7 +31,7 @@ class TestCalculatorService(unittest.TestCase):
 
     def test__evaluate_postfix_notation_returns_correct_value_2(self):
         expression = Expression("sin(max(2,3)/3*3.1)")
-        correct_value = math.sin(max(2, 3)/3*3.1)
+        correct_value = sin(max(2, 3)/3*3.1)
         tokens = ["sin", "(", "max", "(", "2", ",", "3", ")",
                   "/", "3", "*", "3.1", ")"]
         expression.tokens = tokens
@@ -96,13 +98,55 @@ class TestCalculatorService(unittest.TestCase):
 
 class TestCalculatorServiceFull(unittest.TestCase):
     def setUp(self):
-        self.expressions = {
-            Expression("(1+1)"): (1+1),
-            Expression("max(2,3)"): max(2,3),
-            Expression("3/4*2+1-2**4"): 3/4*2+1-2**4
+        self.valid_expressions = {
+            Expression("(2 + 3.5) * 4 - sin(1.2) ^ 2") : (2 + 3.5) * 4 - sin(1.2) ** 2,
+            Expression("max(5.7, 3.2) + 2.8 * sin(0.8) ^ 3"): max(5.7, 3.2) + 2.8 * sin(0.8) ** 3,
+            Expression("(sin(0.5) + 2.1) / max(6.4, 1.7) ^ 2") : (sin(0.5) + 2.1) / max(6.4, 1.7) ** 2,
+            Expression("max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ^ 2"): max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ** 2,
         }
+
+        self.invalid_expressions = [
+            Expression("2 + * 3"),
+            Expression("4 /"),
+            Expression("5 + (6 * 2"),
+            Expression("3 * 4)"),
+            Expression("sin(2 3)"),
+            Expression("max(4,)"),
+            Expression("7 + 2 - * 3"),
+            Expression("sin(1.2))"),
+            Expression("max(2, 3 4)"),
+            Expression("8 + - 5"),
+            Expression("(9 + 2)) * 3")
+        ]
+
         self.calculator_service = calculator_service
 
-    def test_all_test_cases(self):
-        for exp, val in self.expressions.items():
+    def test_that_all_valid_expressions_are_solved_correctly(self):
+        for exp, val in self.valid_expressions.items():
             self.assertEqual(self.calculator_service.solve(exp), val)
+
+    def test_that_correct_error_messages_are_thrown(self):
+        try:
+            self.calculator_service.solve(Expression("3 * 4)"))
+        except Exception as e:
+            self.assertEqual(str(e), "Wrong amount of parantheses!")
+
+        try:
+            self.calculator_service.solve(Expression("*2+1"))
+        except Exception as e:
+            self.assertEqual(str(e), "Expression starts with illegal token!")
+
+        try:
+            self.calculator_service.solve(Expression(""))
+        except Exception as e:
+            self.assertEqual(str(e), "Expression can't be empty!")
+
+        try:
+            self.calculator_service.solve(Expression("2**2"))
+        except Exception as e:
+            self.assertEqual(str(e), "'**' is not a valid power operator! Use '^' instead")
+
+        try:
+            self.calculator_service.solve(Expression("2++2"))
+        except Exception as e:
+            self.assertEqual(str(e), "Consecutive operators are illegal!")
