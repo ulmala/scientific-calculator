@@ -2,7 +2,7 @@ import math
 import unittest
 from unittest.mock import MagicMock, patch
 from entities.expression import Expression
-from services.calculator_service import CalculatorService
+from services.calculator_service import CalculatorService, calculator_service
 
 
 class TestCalculatorService(unittest.TestCase):
@@ -92,3 +92,17 @@ class TestCalculatorService(unittest.TestCase):
                                                                                    "2", "3", "4", "*", "+"])
 
         self.assertEqual(result, 14.0)
+
+
+class TestCalculatorServiceFull(unittest.TestCase):
+    def setUp(self):
+        self.expressions = {
+            Expression("(1+1)"): (1+1),
+            Expression("max(2,3)"): max(2,3),
+            Expression("3/4*2+1-2**4"): 3/4*2+1-2**4
+        }
+        self.calculator_service = calculator_service
+
+    def test_all_test_cases(self):
+        for exp, val in self.expressions.items():
+            self.assertEqual(self.calculator_service.solve(exp), val)
