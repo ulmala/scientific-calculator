@@ -1,5 +1,8 @@
 import re
 from entities.expression import Expression
+from services.validation_service import (
+    validation_service as default_validation_service
+)
 from config import (
     SUPPORTED_FUNCTIONS
 )
@@ -9,6 +12,11 @@ class ParserService:
     """
     Responsible for parsing and validatig expressions
     """
+    def __init__(
+            self,
+            validation_service=default_validation_service
+    ) -> None:
+        self._validation_service = validation_service
 
     def _get_escaped_funcs_and_vars(
             self,
@@ -29,6 +37,13 @@ class ParserService:
             if token in variables:
                 tokens[i] = variables[token]
         return tokens
+    
+    def _remove_whitespaces(
+            self,
+            expression: Expression
+    ):
+        expression.raw_expression = expression.raw_expression.replace(" ", "")
+        return expression
 
     def parse_to_tokens(
             self,
@@ -45,11 +60,13 @@ class ParserService:
         Returns:
             Expression: expression object with tokens
         """
+        expression = self._remove_whitespaces(expression)
         escaped_funcs_and_vars = self._get_escaped_funcs_and_vars(variables)
         pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + \
             "|".join(escaped_funcs_and_vars) + ")"
         tokens = re.findall(pattern, expression.raw_expression)
         tokens = self._convert_variables_to_values(tokens, variables)
+        self._validation_service.check_if_tokens_are_not_dropped(tokens, expression)
         expression.tokens = tokens
         return expression
 
