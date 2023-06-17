@@ -12,42 +12,57 @@ class TestCalculatorService(unittest.TestCase):
         self.calculator_service = CalculatorService()
 
     def test__evaluate_postfix_notation_returns_correct_value_1(self):
+        """Test that postfx notation is evaluated correctly"""
         expression = Expression("3+4.2*2/(1-5)^2^3")
         correct_value = 3+4.2*2/(1-5)**2**3
-        tokens = ["3", "+", "4.2", "*", "2", "/",
-                  "(", "1", "-", "5", ")", "^", "2", "^", "3"]
+        tokens = [
+            "3", "+", "4.2", "*", "2", "/", "(",
+            "1", "-", "5", ")", "^", "2", "^", "3"
+        ]
         expression.tokens = tokens
-        correct_postfix = ["3", "4.2", "2", "*", "1",
-                           "5", "-", "2", "3", "^", "^", "/", "+"]
+        correct_postfix = [
+            "3", "4.2", "2", "*", "1", "5",
+            "-", "2", "3", "^", "^", "/", "+"
+        ]
         expression.postfix = correct_postfix
 
         value = self.calculator_service._evaluate_postfix_notation(
-            expression.postfix)
+            expression.postfix
+        )
 
         correct_value = round(correct_value, 3)
         value = round(correct_value, )
-        self.assertAlmostEqual(correct_value, value,
-                               places=8)  # TODO: debug this
+        self.assertAlmostEqual(
+            correct_value,
+            value,
+            places=8
+        )  # TODO: debug this
 
     def test__evaluate_postfix_notation_returns_correct_value_2(self):
+        """Test that postfx notation is evaluated correctly"""
         expression = Expression("sin(max(2,3)/3*3.1)")
         correct_value = sin(max(2, 3)/3*3.1)
-        tokens = ["sin", "(", "max", "(", "2", ",", "3", ")",
-                  "/", "3", "*", "3.1", ")"]
+        tokens = [
+            "sin", "(", "max", "(", "2", ",",
+            "3", ")", "/", "3", "*", "3.1", ")"
+        ]
         expression.tokens = tokens
         correct_postfix = ["2", "3", "max", "3", "/", "3.1", "*", "sin"]
         expression.postfix = correct_postfix
 
         value = self.calculator_service._evaluate_postfix_notation(
-            expression.postfix)
+            expression.postfix
+        )
         self.assertAlmostEqual(correct_value, value)
 
     def test_variables_property_holds_correct_information(self):
+        """Tests that variable property works correctly"""
         self.assertEqual(self.calculator_service.variables, {})
         self.calculator_service._variables = {"a": 1}
         self.assertEqual(self.calculator_service.variables, {"a": 1})
 
     def test_add_variable_adds_variable_correctly(self):
+        """Tests that adding a new variabel works correclty"""
         self.calculator_service.add_variable(
             variable_name="a",
             variable_value=2
@@ -55,6 +70,7 @@ class TestCalculatorService(unittest.TestCase):
         self.assertEqual(self.calculator_service.variables, {"a": 2})
 
     def test_get_variables_as_string_returns_correct_string(self):
+        """Tests that variables are returned as correct string"""
         self.calculator_service.add_variable(
             variable_name="a",
             variable_value=2
@@ -68,6 +84,10 @@ class TestCalculatorService(unittest.TestCase):
             self.calculator_service.get_variables_as_string(), correct_str)
 
     def test_solve_calls_all_other_functions_with_correct_arguments(self):
+        """
+        Tests that when solving and expression, all other services and methods
+        are called with correct arguments
+        """
         expression = Expression("2 + 3 * 4")
         expression.postfix = ["2", "3", "4", "*", "+"]
         self.calculator_service._validation_service = MagicMock()
@@ -87,11 +107,13 @@ class TestCalculatorService(unittest.TestCase):
             expression=expression,
             variables=self.calculator_service.variables
         )
-        self.calculator_service._shunting_yard_service.run.assert_called_once_with([
-                                                                                   "2", "+", "3", "*", "4"])
+        self.calculator_service._shunting_yard_service.run.assert_called_once_with(
+            ["2", "+", "3", "*", "4"]
+        )
         self.calculator_service._shunting_yard_service.clear_stack_and_queue.assert_called_once()
-        self.calculator_service._evaluate_postfix_notation.assert_called_once_with([
-                                                                                   "2", "3", "4", "*", "+"])
+        self.calculator_service._evaluate_postfix_notation.assert_called_once_with(
+            ["2", "3", "4", "*", "+"]
+        )
 
         self.assertEqual(result, 14.0)
 
@@ -122,10 +144,12 @@ class TestCalculatorServiceFull(unittest.TestCase):
         self.calculator_service = calculator_service
 
     def test_that_all_valid_expressions_are_solved_correctly(self):
+        """Test that epxressions are solved correctly"""
         for exp, val in self.valid_expressions.items():
             self.assertEqual(self.calculator_service.solve(exp), val)
 
     def test_that_correct_error_messages_are_thrown(self):
+        """Tests that correct error messages ares shown"""
         try:
             self.calculator_service.solve(Expression("3 * 4)"))
         except Exception as e:

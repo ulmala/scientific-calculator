@@ -9,6 +9,7 @@ class TestParserService(unittest.TestCase):
         self.parser_service = ParserService()
 
     def test_parse_to_tokens_parses_expressions_correctly(self):
+        """Tests that raw expression is correctly parsed into tokens"""
         expressions = [
             (Expression("2+(10-1)"), ["2", "+", "(", "10", "-", "1", ")"]),
             (Expression("sin(2/3*4)+max(1.1,2)"),
@@ -23,15 +24,18 @@ class TestParserService(unittest.TestCase):
             self.assertEqual(entry[1], tokens)
 
     def test__convert_variables_to_values_returns_same_tokens_if_no_variables_defined(self):
+        """Tests that if no variables are defined, same tokens are returned"""
         tokens = ["1", "+", "1"]
         variables = {}
         self.assertEqual(
             self.parser_service._convert_variables_to_values(
-                tokens, variables),
+                tokens, variables
+            ),
             tokens
         )
 
     def test__convert_variables_to_values_converts_variables_to_values_if_variables_defined(self):
+        """Tests that user defined variables are convert into their values correctyl"""
         tokens = ["a", "+", "1"]
         variables = {"a": "2"}
         self.assertEqual(
