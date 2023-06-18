@@ -47,7 +47,7 @@ class CalculatorService:
     def variables(self) -> dict:
         return self._variables
 
-    def get_variables_as_string(self):
+    def list_variables(self):
         var_str = []
         for var_name, var_value in self._variables.items():
             var_str.append(f"{var_name} = {var_value}")
@@ -55,20 +55,9 @@ class CalculatorService:
 
     def solve(
             self,
-            expression: Expression
+            user_expression: str
     ):
-        """
-        Solves the expression by:
-        - converting the expression into postfix notation using
-        shunting_yard_service
-        - evaluating the postfix notation
-
-        Args:
-            expression (Expression): Expression object
-
-        Returns:
-            float: value of the expression
-        """
+        expression = Expression(raw_expression=user_expression)
         self._validation_service.validate_expression(expression)
         expression = self._parser_service.parse_to_tokens(
             expression=expression,
@@ -76,8 +65,8 @@ class CalculatorService:
         )
         expression = self._shunting_yard_service.run(expression)
         self._shunting_yard_service.clear_stack_and_queue()
-        result = self._evaluate_postfix_notation(expression.postfix)
-        return result
+        expression.value = self._evaluate_postfix_notation(expression.postfix)
+        return expression
 
     def _calculate_basic_operation(
             self,
@@ -117,8 +106,9 @@ class CalculatorService:
             stack: list
     ) -> str:
         """
-        Calculates value of function with two parameters.
-        e.g. max(2,3)
+        Calculates value of function with two parameters e.g. max(2,3).
+        If function reequires integers, e.g. comb(4,2), TypeError is 
+        handled and operands are casted into integers.
 
         Args:
             token (str): token
@@ -129,7 +119,12 @@ class CalculatorService:
         """
         operand_2 = stack.pop()
         operand_1 = stack.pop()
-        result = SUPPORTED_FUNCTIONS[token](float(operand_1), float(operand_2))
+        try:
+            result = SUPPORTED_FUNCTIONS[token](float(operand_1), float(operand_2))
+        except TypeError:
+            operand_1 = int(float(operand_1))
+            operand_2 = int(float(operand_2))
+            result = SUPPORTED_FUNCTIONS[token](operand_1, operand_2)
         return str(result)
 
     def _evaluate_postfix_notation(
