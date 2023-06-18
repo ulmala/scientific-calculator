@@ -23,3 +23,7 @@ def lint(ctx):
 @task
 def format(ctx):
     ctx.run("autopep8 --in-place --recursive src")
+
+@task
+def performance(ctx):
+    ctx.run("python src/performance_test.py", pty=True)
