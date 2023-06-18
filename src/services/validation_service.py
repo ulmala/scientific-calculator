@@ -103,7 +103,8 @@ class ValidationService:
             variable_name: str
     ) -> bool:
         if variable_name.isalpha() and \
-                variable_name not in self._supported_functions:
+            variable_name not in self._supported_functions and \
+            len(variable_name) == 1:
             return True
         return False
 
