@@ -15,8 +15,9 @@ LEFT_ASSOCIATIVE_OPERATORS = ["+", "-", "*", "/"]
 
 SUPPORTED_FUNCTIONS = {
     "sin": math.sin,
-    "max": max
+    "max": max,
+    "comb": math.comb
 }
 
 ONE_PARAMETER_FUNCTIONS = ["sin"]
-TWO_PARAMETER_FUNCTIONS = ["max"]
+TWO_PARAMETER_FUNCTIONS = ["max", "comb"]
