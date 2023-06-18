@@ -91,4 +91,14 @@ class TestValidationService(unittest.TestCase):
     def test_is_valid_variable_name_returns_true_if_valid_variable_name(self):
         self.assertTrue(self.validation_service.is_valid_variable_name("a"))
         self.assertTrue(self.validation_service.is_valid_variable_name("b"))
-        self.assertTrue(self.validation_service.is_valid_variable_name("ab"))
+        self.assertTrue(self.validation_service.is_valid_variable_name("c"))
+
+    def test_check_if_tokens_are_not_dropped_raises_error_if_some_token_is_dropped_when_parsing_to_tokens(self):
+        """
+        If the validation logic fails for some reason and some tokens are dropped from the raw expression,
+        this validation raises error for the user (this means that the invalid expression passed all validation)
+        """
+        expression = Expression("1++1")
+        tokens = ["1+1"]
+        with self.assertRaises(NotValidExpression):
+            self.validation_service.check_if_tokens_are_not_dropped(tokens, expression)
