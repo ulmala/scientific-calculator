@@ -20,11 +20,7 @@ class Expression:
         self._value = None
 
     def __str__(self) -> str:
-        """String representation of the object"""
-        raw_expression = f"raw expression: {self.raw_expression}"
-        tokens = f"tokens: {self.tokens}"
-        postfix = f"postfix notation: {self.postfix}"
-        return f"{raw_expression}\n{tokens}\n{postfix}"
+        return f"{' '.join(self._tokens)} = {self._value}"
 
     @property
     def raw_expression(self) -> str:
