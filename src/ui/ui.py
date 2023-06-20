@@ -1,9 +1,31 @@
-from services.calculator_service import calculator_service
+from services.calculator_service import calculator_service, NotValidVariable
 from services.validation_service import validation_service
 from services.validation_service import NotValidExpression
 
 
 class UI:
+    def __init__(
+            self,
+            calculator_service=calculator_service
+    ) -> None:
+        self._calculator_service = calculator_service
+
+    def _handle_add_variable(
+            self,
+            var_name=None,
+            var_value=None
+    ):
+        if not var_name and not var_value:
+            var_name = input("Variable name: ")
+            var_value = input("Variable value: ")
+        try:
+            self._calculator_service.add_variable(
+                variable_name=var_name,
+                variable_value=str(var_value)
+            )
+        except NotValidVariable as e:
+            print(f"*!*!*!*!*!*! {e} *!*!*!*!*!*!")
+
     def start(self):
         while True:
             for _ in range(100): print("#", end="")
@@ -20,27 +42,18 @@ class UI:
                     print(f"*!*!*!*!*!*! {e} *!*!*!*!*!*!")
                     continue
 
-                #print(expression)
+                print(expression)
 
                 user_input = input(
                     "Enter variable name to store the result into variable (else press Enter): "
                 )
-                if user_input == "":
-                    continue
-                calculator_service.add_variable(
-                    variable_name=user_input,
-                    variable_value=str(expression.value)
-                )
+                if user_input != "":
+                    self._handle_add_variable(
+                        var_name=user_input,
+                        var_value=expression.value
+                    )
 
             if user_input == "var":
-                var_name = input("Variable name: ")
-                if not validation_service.is_valid_variable_name(var_name):
-                    print(f"{var_name} is not a valid variable name!")
-                    continue
-                var_value = input("Variable value: ")
-                if not validation_service.is_number(var_value):
-                    print(f"{var_value} is not a valid variable value!")
-                    continue
-                calculator_service.add_variable(
-                    variable_name=var_name, variable_value=var_value)
+                self._handle_add_variable()
+
             print(calculator_service.list_variables())
