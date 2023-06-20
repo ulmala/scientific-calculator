@@ -13,6 +13,8 @@ from config import (
     SUPPORTED_FUNCTIONS
 )
 
+class NotValidVariable(Exception):
+    pass
 
 class CalculatorService:
     """
@@ -41,6 +43,10 @@ class CalculatorService:
             variable_name: str,
             variable_value: str
     ):
+        if not self._validation_service.is_valid_variable_name(variable_name):
+            raise NotValidVariable(f"{variable_name} is not a valid variable name!")
+        if not self._validation_service.is_number(variable_value):
+            raise NotValidVariable(f"{variable_value} is not a valid variable value!")
         self._variables[variable_name] = variable_value
 
     @property
