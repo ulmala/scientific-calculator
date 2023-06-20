@@ -79,11 +79,26 @@ class CalculatorService:
             token: str,
             stack: list
     ) -> str:
+        """
+        Calculate basic mathematical opearation.
+        '^' operators will be replaced with '**' and
+        if the operand_2 is negative it will be put in to
+        parantheses, because other wise power operator would fail.
+        e.g. -4**2 != (-4)**2
+
+        Args:
+            token (str): operand
+            stack (list): stack
+
+        Returns:
+            str: evaluated result
+        """
         operand_1 = stack.pop()
         operand_2 = stack.pop()
         if token == "^":
             token = "**"
-        # TODO: do this using ast; https://stackoverflow.com/questions/2371436/evaluating-a-mathematical-expression-in-a-string
+        if operand_2.startswith("-"):
+            operand_2 = f"({operand_2})"
         return str(eval(operand_2 + token + operand_1))
 
     def _calculate_one_parameter_function(
@@ -162,7 +177,6 @@ class CalculatorService:
                 stack.append(
                     self._calculate_basic_operation(token, stack)
                 )
-
         value = float(stack.pop())
         return value
 
