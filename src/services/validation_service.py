@@ -159,11 +159,11 @@ class ValidationService:
             return True
         return False
 
-    def _expression_starts_with_plus_or_minus(
+    def _expression_starts_with__minus(
             self,
             expression: Expression
     ) -> bool:
-        if expression.raw_expression[0] in ["+", "-"]:
+        if expression.raw_expression[0] == "-":
             return True
         return False
 
@@ -184,7 +184,7 @@ class ValidationService:
             self._expression_starts_with_number,
             self._expression_starts_with_left_paranthesis,
             self._expression_starts_with_alphabet,
-            self._expression_starts_with_plus_or_minus
+            self._expression_starts_with__minus
         ]
         if all(validation(expression) == False for validation in validations):
             raise NotValidExpression("Expression starts with illegal token!")
