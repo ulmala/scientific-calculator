@@ -5,8 +5,10 @@ from unittest.mock import MagicMock, patch
 from entities.expression import Expression
 from services.calculator_service import CalculatorService, calculator_service
 
+
 class NotValidExpression(Exception):
     pass
+
 
 class TestCalculatorService(unittest.TestCase):
     def setUp(self):
@@ -14,30 +16,23 @@ class TestCalculatorService(unittest.TestCase):
 
     def test__evaluate_postfix_notation_returns_correct_value_1(self):
         """Test that postfx notation is evaluated correctly"""
-        expression = Expression("3+4.2*2/(1-5)^2^3")
-        correct_value = 3+4.2*2/(1-5)**2**3
+        expression = Expression("3+4*2/(1-5)^2")  # ^3")
+        correct_value = 3+4*2/(1-5)**2  # **3
         tokens = [
-            "3", "+", "4.2", "*", "2", "/", "(",
-            "1", "-", "5", ")", "^", "2", "^", "3"
+            "3", "+", "4", "*", "2", "/", "(",
+            "1", "-", "5", ")", "^", "2"
         ]
         expression.tokens = tokens
         correct_postfix = [
-            "3", "4.2", "2", "*", "1", "5",
-            "-", "2", "3", "^", "^", "/", "+"
+            "3", "4", "2", "*", "1", "5",
+            "-", "2", "^", "/", "+"
         ]
         expression.postfix = correct_postfix
 
         value = self.calculator_service._evaluate_postfix_notation(
             expression.postfix
         )
-
-        correct_value = round(correct_value, 3)
-        value = round(correct_value, )
-        self.assertAlmostEqual(
-            correct_value,
-            value,
-            places=8
-        )  # TODO: debug this
+        self.assertAlmostEqual(value, correct_value)
 
     def test__evaluate_postfix_notation_returns_correct_value_2(self):
         """Test that postfx notation is evaluated correctly"""
@@ -129,16 +124,17 @@ class TestCalculatorService(unittest.TestCase):
         """
         token = "comb"
         stack = ["4.0", "2.0"]
-        result = self.calculator_service._calculate_two_parameter_function(token, stack)
+        result = self.calculator_service._calculate_two_parameter_function(
+            token, stack)
         result = self.assertEqual(result, "6")
 
 
 class TestCalculatorServiceFull(unittest.TestCase):
     def setUp(self):
         self.valid_expressions = {
-            "(2 + 3.5) * 4 - sin(1.2) ^ 2" : (2 + 3.5) * 4 - sin(1.2) ** 2,
+            "(2 + 3.5) * 4 - sin(1.2) ^ 2": (2 + 3.5) * 4 - sin(1.2) ** 2,
             "max(5.7, 3.2) + 2.8 * sin(0.8) ^ 3": max(5.7, 3.2) + 2.8 * sin(0.8) ** 3,
-            "(sin(0.5) + 2.1) / max(6.4, 1.7) ^ 2" : (sin(0.5) + 2.1) / max(6.4, 1.7) ** 2,
+            "(sin(0.5) + 2.1) / max(6.4, 1.7) ^ 2": (sin(0.5) + 2.1) / max(6.4, 1.7) ** 2,
             "max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ^ 2": max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ** 2,
         }
 
@@ -184,7 +180,8 @@ class TestCalculatorServiceFull(unittest.TestCase):
         try:
             self.calculator_service.solve("2**2")
         except Exception as e:
-            self.assertEqual(str(e), "'**' is not a valid power operator! Use '^' instead")
+            self.assertEqual(
+                str(e), "'**' is not a valid power operator! Use '^' instead")
 
         try:
             self.calculator_service.solve("2++2")

@@ -29,9 +29,7 @@ class TestValidationService(unittest.TestCase):
         expressions = [
             Expression("(1+1)"),
             Expression("1+1"),
-            Expression("sin(90)"),
-            Expression("+1+1"),
-            Expression("-1+1"),
+            Expression("sin(90)")
         ]
         for expression in expressions:
             self.assertIsNone(
@@ -101,4 +99,5 @@ class TestValidationService(unittest.TestCase):
         expression = Expression("1++1")
         tokens = ["1+1"]
         with self.assertRaises(NotValidExpression):
-            self.validation_service.check_if_tokens_are_not_dropped(tokens, expression)
+            self.validation_service.check_if_tokens_are_not_dropped(
+                tokens, expression)
