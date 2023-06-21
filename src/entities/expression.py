@@ -37,6 +37,12 @@ class Expression:
         self,
         raw_expression: str
     ):
+        """
+        Sets raw expression to class variable
+
+        Args:
+            raw_expression (str): raw expression
+        """
         self._raw_expression = raw_expression
 
     @property
@@ -55,7 +61,7 @@ class Expression:
             tokens: list
     ):
         """
-        Sets tokens to class variable.
+        Sets tokens to class variable
 
         Args:
             tokens (list): tokens
@@ -88,6 +94,12 @@ class Expression:
 
     @property
     def value(self) -> float:
+        """
+        Value of solved expression
+
+        Returns:
+            float: value of experssion
+        """
         return self._value
 
     @value.setter

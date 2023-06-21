@@ -13,8 +13,11 @@ from config import (
     SUPPORTED_FUNCTIONS
 )
 
+
 class NotValidVariable(Exception):
+    """Exception raised for invalid variables"""
     pass
+
 
 class CalculatorService:
     """
@@ -42,18 +45,46 @@ class CalculatorService:
             self,
             variable_name: str,
             variable_value: str
-    ):
+    ) -> None:
+        """
+        Add new user defined variable to the calculator
+
+        Args:
+            variable_name (str): name of the variable
+            variable_value (str): value to be assigned
+
+        Raises:
+            NotValidVariable: if variable name or value is illegal
+        """
         if not self._validation_service.is_valid_variable_name(variable_name):
-            raise NotValidVariable(f"{variable_name} is not a valid variable name!")
+            raise NotValidVariable(
+                f"{variable_name} is not a valid variable name!"
+            )
         if not self._validation_service.is_number(variable_value):
-            raise NotValidVariable(f"{variable_value} is not a valid variable value!")
+            raise NotValidVariable(
+                f"{variable_value} is not a valid variable value!"
+            )
         self._variables[variable_name] = variable_value
 
     @property
     def variables(self) -> dict:
+        """
+        User defined variables (name as key, value as value)
+
+        Returns:
+            dict: variables
+        """
         return self._variables
 
-    def list_variables(self):
+    def list_variables(self) -> str:
+        """
+        Returns all variables as string, e.g.:
+        a = 2.0
+        b = 1.0
+
+        Returns:
+            str: variables as string
+        """
         var_str = []
         for var_name, var_value in self._variables.items():
             var_str.append(f"{var_name} = {var_value}")
@@ -62,7 +93,21 @@ class CalculatorService:
     def solve(
             self,
             user_expression: str
-    ):
+    ) -> Expression:
+        """
+        Main function of the calculator:
+        - creates Expression object
+        - runs all expression validations using ValidationService
+        - parses expression to tokens using ParserService
+        - converts expression to postfix notation using ShuntingYardService
+        - evaluates postfix notation
+
+        Args:
+            user_expression (str): epxression 
+
+        Returns:
+            Expression: solved expression
+        """
         expression = Expression(raw_expression=user_expression)
         self._validation_service.validate_expression(expression)
         expression = self._parser_service.parse_to_tokens(
@@ -70,7 +115,6 @@ class CalculatorService:
             variables=self.variables
         )
         expression = self._shunting_yard_service.run(expression)
-        self._shunting_yard_service.clear_stack_and_queue()
         expression.value = self._evaluate_postfix_notation(expression.postfix)
         return expression
 
@@ -141,7 +185,8 @@ class CalculatorService:
         operand_2 = stack.pop()
         operand_1 = stack.pop()
         try:
-            result = SUPPORTED_FUNCTIONS[token](float(operand_1), float(operand_2))
+            result = SUPPORTED_FUNCTIONS[token](
+                float(operand_1), float(operand_2))
         except TypeError:
             operand_1 = int(float(operand_1))
             operand_2 = int(float(operand_2))

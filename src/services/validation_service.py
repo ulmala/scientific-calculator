@@ -10,23 +10,20 @@ from config import (
 
 
 class NotValidExpression(Exception):
+    """Exception raised for invalid expressions"""
     pass
 
 
 class ValidationService:
-    def __init__(
-            self,
-            supported_functions=SUPPORTED_FUNCTIONS,
-            one_parameter_functions=ONE_PARAMETER_FUNCTIONS,
-            two_parameter_functions=TWO_PARAMETER_FUNCTIONS,
-            operators=OPERATORS,
-            left_associative_operators=LEFT_ASSOCIATIVE_OPERATORS
-    ) -> None:
-        self._supported_functions = supported_functions
-        self._one_parameter_functions = one_parameter_functions
-        self._two_parameter_functions = two_parameter_functions
-        self._operators = operators
-        self._left_associative_operators = left_associative_operators
+    """
+    Responsible for offering various validation services
+    """
+    def __init__(self) -> None:
+        self._supported_functions = SUPPORTED_FUNCTIONS
+        self._one_parameter_functions = ONE_PARAMETER_FUNCTIONS
+        self._two_parameter_functions = TWO_PARAMETER_FUNCTIONS
+        self._operators = OPERATORS
+        self._left_associative_operators = LEFT_ASSOCIATIVE_OPERATORS
 
     def is_number(
             self,
@@ -44,7 +41,7 @@ class ValidationService:
         try:
             float(token)
             return True
-        except:
+        except ValueError:
             return False
 
     def is_function(
@@ -102,9 +99,19 @@ class ValidationService:
             self,
             variable_name: str
     ) -> bool:
+        """
+        Checks if given string is valid variable name;
+        variable name must be a single alphabet
+
+        Args:
+            variable_name (str): variable name to be checked
+
+        Returns:
+            bool: True if valid, else False
+        """
         if variable_name.isalpha() and \
-            variable_name not in self._supported_functions and \
-            len(variable_name) == 1:
+                variable_name not in self._supported_functions and \
+                len(variable_name) == 1:
             return True
         return False
 
@@ -159,10 +166,19 @@ class ValidationService:
             return True
         return False
 
-    def _expression_starts_with__minus(
+    def _expression_starts_with_minus(
             self,
             expression: Expression
     ) -> bool:
+        """
+        Checks if expression starts with '-' sign
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Returns:
+            bool: True if starts with '-', else False
+        """
         if expression.raw_expression[0] == "-":
             return True
         return False
@@ -184,9 +200,9 @@ class ValidationService:
             self._expression_starts_with_number,
             self._expression_starts_with_left_paranthesis,
             self._expression_starts_with_alphabet,
-            self._expression_starts_with__minus
+            self._expression_starts_with_minus
         ]
-        if all(validation(expression) == False for validation in validations):
+        if all(validation(expression) is False for validation in validations):
             raise NotValidExpression("Expression starts with illegal token!")
 
     def _matching_parantheses(
@@ -207,27 +223,56 @@ class ValidationService:
         right_parantheses = len(re.findall(r"\)", expression.raw_expression))
         if left_parantheses != right_parantheses:
             raise NotValidExpression("Wrong amount of parantheses!")
-        
+
     def _expression_is_not_empty(
             self,
             expression: Expression
     ):
+        """
+        Checks if user given raw expression is empty string
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Raises:
+            NotValidExpression: if empty string
+        """
         if len(expression.raw_expression) == 0:
             raise NotValidExpression("Expression can't be empty!")
-        
+
     def _correct_power_operator(
             self,
             expression: Expression
     ):
+        """
+        Checks if user used '**' as power operator,
+        valid one is '^'
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Raises:
+            NotValidExpression: if expression contains '**'
+        """
         if "**" in expression.raw_expression:
             raise NotValidExpression(
                 "'**' is not a valid power operator! Use '^' instead"
             )
-        
+
     def _check_if_no_consecutive_operators(
             self,
             expression: Expression
     ):
+        """
+        Checks if expression contains consecutive operators,
+        e.g. '1++1' or '3^^2'
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Raises:
+            NotValidExpression: if expression contains consecutive operators
+        """
         pattern = r"(?:\+\+|--|\*\*|//|[+\-*/]){2,}"
         if re.search(pattern, expression.raw_expression):
             raise NotValidExpression(
@@ -239,9 +284,13 @@ class ValidationService:
             expression: Expression
     ):
         """
-        Runs all validations.
+        Runs all expression validations, checks if:
+        - expression is empty
+        - correct power operator is used
+        - consecutive operators exists
+        - parantheses match
+        - expression starts with valid token
 
-        TODO: validate that expression does not contain undefined variables
         Args:
             expression (Expression): expression to be validated
         """
@@ -302,7 +351,6 @@ class ValidationService:
         """
         if len(expression.raw_expression) != len("".join(tokens)):
             raise NotValidExpression("Not a valid expression!")
-
 
 
 validation_service = ValidationService()

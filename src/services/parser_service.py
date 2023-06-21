@@ -12,6 +12,7 @@ class ParserService:
     """
     Responsible for parsing and validatig expressions
     """
+
     def __init__(
             self,
             validation_service=default_validation_service
@@ -22,10 +23,21 @@ class ParserService:
             self,
             variables: dict
     ) -> list:
-        funcs_and_vars = list(SUPPORTED_FUNCTIONS.keys()
-                              ) + list(variables.keys())
+        """
+        Returns list of escaped function names and 
+        variables
+
+        Args:
+            variables (dict): user defined variables
+
+        Returns:
+            list: list of escaped functions and variables
+        """
+        funcs_and_vars = list(SUPPORTED_FUNCTIONS.keys())\
+            + list(variables.keys())
         escaped_funcs_and_vars = [
-            re.escape(substring) for substring in funcs_and_vars]
+            re.escape(substring) for substring in funcs_and_vars
+        ]
         return escaped_funcs_and_vars
 
     def _convert_variables_to_values(
@@ -33,24 +45,45 @@ class ParserService:
             tokens: list,
             variables: dict
     ) -> list:
+        """
+        Convert variable names to their values in tokens.
+        E.g. ['a', '+', '1'] -> ['2', '+', '1']
+
+        Args:
+            tokens (list): list of tokens
+            variables (dict): user defined variables
+
+        Returns:
+            list: tokens where variables converted to values
+        """
         for i, token in enumerate(tokens):
             if token in variables:
                 tokens[i] = variables[token]
         return tokens
-    
+
     def _remove_whitespaces(
             self,
             expression: Expression
-    ):
+    ) -> Expression:
+        """
+        Remove all whitespaces from the user given
+        raw expression
+
+        Args:
+            expression (Expression): expression object
+
+        Returns:
+            Expression: expression object
+        """
         expression.raw_expression = expression.raw_expression.replace(" ", "")
         return expression
-    
+
     def _add_leading_zero_if_starting_with_minus(
             self,
             expression: Expression
     ) -> Expression:
         """
-        If user's expression starts with '-' this methdo will add
+        If user's expression starts with '-' this method will add
         leading zero to the expression. This way the Shuting Yard
         algorithm will handle expression correctly
 
@@ -63,12 +96,23 @@ class ParserService:
         if expression.raw_expression[0] == "-":
             expression.raw_expression = "0" + expression.raw_expression
         return expression
-    
+
     def _get_tokens(
             self,
             expression: Expression,
             variables: dict
-    ) -> Expression:
+    ) -> list:
+        """
+        Parse expression in to tokens;
+        all arithmetic operators, number, functions etc.
+
+        Args:
+            expression (Expression): expression to be handled
+            variables (dict): user defined variables
+
+        Returns:
+            list: list of tokens
+        """
         escaped_funcs_and_vars = self._get_escaped_funcs_and_vars(variables)
         pattern = r"(\d+(?:\.\d+)?|\+|\-|\*|\^|\/|\(|\)|\,|" + \
             "|".join(escaped_funcs_and_vars) + ")"
@@ -99,7 +143,9 @@ class ParserService:
         expression = self._remove_whitespaces(expression)
         expression = self._add_leading_zero_if_starting_with_minus(expression)
         tokens = self._get_tokens(expression, variables)
-        self._validation_service.check_if_tokens_are_not_dropped(tokens, expression)
+        self._validation_service.check_if_tokens_are_not_dropped(
+            tokens, expression
+        )
         tokens = self._convert_variables_to_values(tokens, variables)
         expression.tokens = tokens
         return expression
