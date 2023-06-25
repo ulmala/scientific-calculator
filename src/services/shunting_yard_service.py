@@ -23,7 +23,7 @@ class ShuntingYardService:
         self._operator_prec = OPERATOR_PRECEDENCE
         self._validation_service = validation_service
 
-    def clear_stack_and_queue(self):
+    def _clear_stack_and_queue(self):
         self._output_queue = OutputQueue()
         self._operator_stack = OperatorStack()
 
@@ -54,7 +54,7 @@ class ShuntingYardService:
         print("stack: ", self._operator_stack)
         print("output queue: ", self._output_queue)
         print("next token to be handled: ", token)
-        #input()
+        input()
 
     def run(
             self,
@@ -63,14 +63,14 @@ class ShuntingYardService:
         """
         The algorithm
         """
+        self._clear_stack_and_queue()
         tokens = expression.tokens
-        #print(tokens)
-        #print(expression.raw_expression)
+        # print(tokens)
+        # print(expression.raw_expression)
 
         # while there are tokens to be read:
         for token in tokens:
-            #self._print_status(token)
-
+            # self._print_status(token)
             # if token is a number: put it into the output queue
             if self._validation_service.is_number(token):
                 self._output_queue.put(token)
@@ -138,10 +138,11 @@ class ShuntingYardService:
         while not self._operator_stack.is_empty():
             self._pop_from_stack_to_queue()
 
-        #print("stack:", self._operator_stack)
-        #print("queue: ", self._output_queue)
+        # print("stack:", self._operator_stack)
+        # print("queue: ", self._output_queue)
 
         expression.postfix = self._output_queue.as_list()
+        print(expression.postfix)
         return expression
 
 
