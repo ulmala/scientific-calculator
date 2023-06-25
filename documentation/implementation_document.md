@@ -2,61 +2,81 @@
 
 ## Structure
 
-Current source code is structured as follows:
+Application's structure is shown below:  
+![alt text](images/arch.png)
 
-```
-src
-├── calculator.py
-├── config.py
-├── entities
-│   ├── expression.py
-│   ├── operator_stack.py
-│   └── output_queue.py
-├── services
-│   ├── calculator_service.py
-│   ├── parser_service.py
-│   ├── shunting_yard_service.py
-│   └── validation_service.py
-├── tests
-│   ├── entities
-│   └── services
-└── ui
-    └── ui.py
-```
 
-### Description of each file
-`calculator.py`:  
-Launches the application.
+User interface, `UI`, contains simple command line user interface. User interface doesn't contain application logic. User interface is only communicating with `CalculatorService`.
 
-`config.py`:  
-Contains general configurations for the calculator, such as which functions are supported in the calculator.
 
-`entities/expression.py`:  
-Class to represent the expression and its different forms, such as postfix notation.
+### Services
 
-`entities/operator_stack.py`:  
-Class to represent the operator stack which is used in the Shunting Yard algorithm.  
+Description of the applications services.
 
-`entities/output_queue.py`:  
-Class to represent the output queue which is used in the Shunting Yard algorithm.  
+`CalculatorService` :
+- executes the high level logic of the application
+- stores user defined variables
+- evaluates postfix notations
+- executes basic mathematical operations and functions (sin(.) etc.) 
 
-`services/calculator_service.py`:  
-Responsible for executing the high level logic of the calculation process. Also responsible for executing the mathematical operations.  
+`ValidationService` :
+- offers various validation/checking methods for other services, e.g:
+    - validating that the experssion starts with legal token
+    - validating that user defined variable names and values are legal
+    - etc.
 
-`services/parser_service.py`:  
-Responsible for parsing the user's expressions.  
+`ParserService` :
+- parses the expression, which user has given, into tokens which then are processed by the Shunting Yard algorithm
+    - also prepares the expression prior to parsing, e.g.:
+        - removes whitespaces
+        - converts possible variables into their values
+        - etc.
 
-`services/shunting_yard_service.py`:  
-The actual Shunting yard algorithm.  
+`ShuntingYardService` :
+- implements the actual Shunting Yard algorithm which parses the expression in infix notation into postfix notation
+- algorithm uses two data structures: stack and queue (these are defined in their own classes, see below)
 
-`services/validation_service.py`:  
-Responsible for offering different kind of validation methods.  
 
-`tests/*.py`:  
-All tests.  
+### Entities
 
-`ui/ui.py`:  
-Application's command line user interface.
+Entities classess are responsible for holding data, they shouldn't contain complex logic.  
+
+`Expression` :
+- holds information of the user given expression and it's different forms:
+    - raw input from the user
+    - expression parsed into tokens
+    - tokens in postfix notation
+    - the value of the solved expression
+
+`OperatorStack` :
+- Shunting Yard algorithm uses stack data structure to store expression's operators during algortihm execution
+- this class holds the data itself and also implements helper methods, e.g.:
+    - method for checking is the stack empty
+    - method for checking what's the top operator
+    - etc.
+
+`OutputQueue`:
+- Shunting Yard algorithm uses queue data structure to store the results
+- this classs holds the data
+
+
+## Time and space complexity
+
+Time complexity of this application is $O(n)$. The algorithm traverses through the user given experssion only once.  
+
+Space complexity of this application is also $O(n)$ since stack is used.
+
+### Perfomance
+
+Time complexity was also tested in practice with different sizes of inputs. In practice large inputs, such as $n=10^5$, are not that relevant with calculator whihc is used by human. Performance test was run to validate the time comlexity in practice. 
+
+Performance test is in file `src/performance_test.py`. The script reads differents sizes of inputs from dir `src/data` and calculates how much time it takes to solve the expression.  
+
+It can be seen from the graph below that the application solves them in $O(n)$ time:  
+![alt text](images/performance.png)
+
+
+# TODO PUUTTEET
 
 
 ## References
