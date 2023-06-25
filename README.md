@@ -7,6 +7,7 @@ University of Helsinki course: Data structures and Algorithms Lab
 - [week 3](documentation/weekly_reports/week_3.md)
 - [week 4](documentation/weekly_reports/week_4.md)
 - [week 5](documentation/weekly_reports/week_5.md)
+- [week 6](documentation/weekly_reports/week_6.md)
 
 ## Setup guide
 
