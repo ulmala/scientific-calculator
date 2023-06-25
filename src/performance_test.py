@@ -17,6 +17,7 @@ EXPRESSION_FILES = {
     "expression_1e6.txt": 5.943439281508401e+69,
 }
 
+
 def get_raw_expression(
         file_name: str
 ) -> str:
@@ -25,6 +26,7 @@ def get_raw_expression(
     with open(file_path) as file:
         raw_expression = file.read()
     return raw_expression
+
 
 def create_plot(
         performance: pd.DataFrame,
@@ -39,7 +41,7 @@ def create_plot(
     )
     plt.scatter(
         performance["input size"],
-        performance["duration [ms]"], 
+        performance["duration [ms]"],
         label="measured",
         zorder=2
     )
@@ -48,15 +50,15 @@ def create_plot(
     plt.xlabel("tokens")
     plt.grid()
     plt.legend()
-    
+
     if save_fig:
-        path = Path(os.path.dirname(os.path.abspath(__file__))) / "performance.png"
+        path = Path(os.path.dirname(os.path.abspath(__file__))) / \
+            "performance.png"
         plt.savefig(path)
         print(path.parent.absolute())
 
     plt.show()
-        
-    
+
 
 def main():
     input_sizes = []
@@ -84,9 +86,9 @@ def main():
     )
     performance["input size"] = performance["input size"].astype(int)
     print("***************************** RESULTS *****************************")
-    print(performance)    
+    print(performance)
     create_plot(performance)
-        
+
 
 if __name__ == "__main__":
     main()
