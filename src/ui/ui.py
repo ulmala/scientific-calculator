@@ -1,4 +1,3 @@
-import sys
 from services.calculator_service import calculator_service, NotValidVariable
 from services.validation_service import NotValidExpression
 
