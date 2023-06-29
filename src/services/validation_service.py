@@ -18,6 +18,7 @@ class ValidationService:
     """
     Responsible for offering various validation services
     """
+
     def __init__(self) -> None:
         self._supported_functions = SUPPORTED_FUNCTIONS
         self._one_parameter_functions = ONE_PARAMETER_FUNCTIONS
@@ -278,7 +279,7 @@ class ValidationService:
             raise NotValidExpression(
                 "Consecutive operators are illegal!"
             )
-        
+
     def _expression_ends_with_valid_token(
             self,
             expression: Expression

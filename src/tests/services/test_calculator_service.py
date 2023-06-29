@@ -146,6 +146,7 @@ class TestCalculatorService(unittest.TestCase):
                 variable_value=variable_value
             )
 
+
 class TestCalculatorServiceWithMultipleExpressions(unittest.TestCase):
     def setUp(self):
         self.valid_expressions = {

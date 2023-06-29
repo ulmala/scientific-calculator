@@ -47,5 +47,6 @@ class TestParserService(unittest.TestCase):
 
     def test__add_leading_zero_if_starting_with_minus(self):
         expression = Expression("-1+1")
-        expression = self.parser_service._add_leading_zero_if_starting_with_minus(expression)
+        expression = self.parser_service._add_leading_zero_if_starting_with_minus(
+            expression)
         self.assertEqual(expression.raw_expression[0], "0")

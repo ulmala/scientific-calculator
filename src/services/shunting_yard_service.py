@@ -102,8 +102,8 @@ class ShuntingYardService:
 
             # - a right parenthesis (i.e. ")"):
             if token == ")":
-                #if not self._operator_stack.is_empty():
-                    # while the operator at the top of the operator stack is not a left parenthesis:
+                # if not self._operator_stack.is_empty():
+                # while the operator at the top of the operator stack is not a left parenthesis:
                 while self._operator_stack.top_operator() != "(":
                     # pop the operator from the operator stack into the output queue
                     self._pop_from_stack_to_queue()
@@ -115,7 +115,6 @@ class ShuntingYardService:
                 #   pop the function from the operator stack into the output queue
                 if self._operator_stack.function_at_top():
                     self._pop_from_stack_to_queue()
-
 
         while not self._operator_stack.is_empty():
             self._pop_from_stack_to_queue()
