@@ -278,6 +278,25 @@ class ValidationService:
             raise NotValidExpression(
                 "Consecutive operators are illegal!"
             )
+        
+    def _expression_ends_with_valid_token(
+            self,
+            expression: Expression
+    ):
+        """
+        Checks if expression ends with valid token
+
+        Args:
+            expression (Expression): expression to be checked
+
+        Raises:
+            NotValidExpression: if expression ends with invalid token
+        """
+        last_token = expression.raw_expression[-1]
+        if self.is_operator(last_token):
+            raise NotValidExpression(
+                "Expression ends with invalid token"
+            )
 
     def validate_expression(
             self,
@@ -299,6 +318,7 @@ class ValidationService:
         self._check_if_no_consecutive_operators(expression)
         self._matching_parantheses(expression)
         self._expression_starts_with_valid_token(expression)
+        self._expression_ends_with_valid_token(expression)
 
     def is_operator(
             self,
@@ -340,14 +360,15 @@ class ValidationService:
             expression: Expression
     ):
         """
-        Validates parsed token
+        Validates that parsed tokens has the same length as
+        the raw expression, ergo tokens were parsed correctly.
 
         Args:
-            tokens (list): _description_
-            expression (Expression): _description_
+            tokens (list): list of tokens
+            expression (Expression): expression
 
         Raises:
-            NotValidExpression: _description_
+            NotValidExpression: if raw_expression and token len are not equal
         """
         if len(expression.raw_expression) != len("".join(tokens)):
             raise NotValidExpression("Not a valid expression!")
