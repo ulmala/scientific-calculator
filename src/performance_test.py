@@ -1,20 +1,20 @@
-import matplotlib.pyplot as plt
 import os
 import pandas as pd
 import time
+import matplotlib.pyplot as plt
 from pathlib import Path
 from services.calculator_service import calculator_service
 
 
 EXPRESSION_FILES = {
-    "expression_1e3.txt": 3379033636367.9805,
-    "expression_1e4.txt": -6.209682653414233e+23,
-    "expression_1e5.txt": -5.899538925137423e+40,
-    "expression_2e5.txt": 1.4364851723709696e+38,
-    "expression_4e5.txt": 1.9677116952196367e+49,
-    "expression_6e5.txt": -2.690696242185166e+43,
-    "expression_8e5.txt": -2.2226496068812532e+42,
-    "expression_1e6.txt": 5.943439281508401e+69,
+    "expression_1e3.txt": 2.708673211137267,
+    "expression_1e4.txt": 1.9361217662961778,
+    "expression_1e5.txt": 30.168668920426107,
+    "expression_2e5.txt": -40.786517563680654,
+    "expression_4e5.txt": -28.262839343470613,
+    "expression_6e5.txt": -43.51917840747542,
+    "expression_8e5.txt": -78.54296916429949,
+    "expression_1e6.txt": -18.668906995495558,
 }
 
 
@@ -45,9 +45,9 @@ def create_plot(
         label="measured",
         zorder=2
     )
-    plt.title("Algorithm execution time dependecy on expression lenght")
+    plt.title("Algorithm execution time dependecy on expression length")
     plt.ylabel("time [ms]")
-    plt.xlabel("tokens")
+    plt.xlabel("N tokens")
     plt.grid()
     plt.legend()
 
