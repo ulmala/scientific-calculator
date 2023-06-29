@@ -49,28 +49,24 @@ class ShuntingYardService:
         operator = self._operator_stack.pop()
         self._output_queue.put(operator)
 
-    def _print_status(self, token):
-        print("*********** CURRENT STATUS ***********")
-        print("stack: ", self._operator_stack)
-        print("output queue: ", self._output_queue)
-        print("next token to be handled: ", token)
-        input()
-
     def run(
             self,
             expression: Expression
     ) -> Expression:
         """
-        The algorithm
+        The Shunting Yard algorithm
+
+        Args:
+            expression (Expression): expression to be handled
+
+        Returns:
+            Expression: expression with postfix notation
         """
         self._clear_stack_and_queue()
         tokens = expression.tokens
-        # print(tokens)
-        # print(expression.raw_expression)
 
         # while there are tokens to be read:
-        for token in tokens:
-            # self._print_status(token)
+        for token in expression.tokens:
             # if token is a number: put it into the output queue
             if self._validation_service.is_number(token):
                 self._output_queue.put(token)
@@ -99,10 +95,6 @@ class ShuntingYardService:
                 # push o1 onto the operator stack
                 self._operator_stack.push(token)
 
-            # TODO: # - a ",":
-                #   while the operator at the top of the operator stack is not a left parenthesis:
-                #       pop the operator from the operator stack into the output queue
-
             # - a left parenthesis (i.e. "("):
             if token == "(":
                 # push it onto the operator stack
@@ -110,16 +102,11 @@ class ShuntingYardService:
 
             # - a right parenthesis (i.e. ")"):
             if token == ")":
-                if not self._operator_stack.is_empty():
+                #if not self._operator_stack.is_empty():
                     # while the operator at the top of the operator stack is not a left parenthesis:
-                    while self._operator_stack.top_operator() != "(":
-                        # TODO: {assert the operator stack is not empty}
-                        # /* If the stack runs out without finding a left parenthesis, then there are mismatched parentheses. */
-
-                        # pop the operator from the operator stack into the output queue
-                        self._pop_from_stack_to_queue()
-
-                # TODO: {assert there is a left parenthesis at the top of the operator stack}
+                while self._operator_stack.top_operator() != "(":
+                    # pop the operator from the operator stack into the output queue
+                    self._pop_from_stack_to_queue()
 
                 # pop the left parenthesis from the operator stack and discard it
                 self._operator_stack.pop()
@@ -129,20 +116,11 @@ class ShuntingYardService:
                 if self._operator_stack.function_at_top():
                     self._pop_from_stack_to_queue()
 
-        # /* After the while loop, pop the remaining items from the operator stack into the output queue. */
-        # while there are tokens on the operator stack:
-
-        # TODO: /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
-                # {assert the operator on top of the stack is not a (left) parenthesis}
 
         while not self._operator_stack.is_empty():
             self._pop_from_stack_to_queue()
 
-        # print("stack:", self._operator_stack)
-        # print("queue: ", self._output_queue)
-
         expression.postfix = self._output_queue.as_list()
-        print(expression.postfix)
         return expression
 
 
