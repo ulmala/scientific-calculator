@@ -63,7 +63,6 @@ class ShuntingYardService:
             Expression: expression with postfix notation
         """
         self._clear_stack_and_queue()
-        tokens = expression.tokens
 
         # while there are tokens to be read:
         for token in expression.tokens:
@@ -78,8 +77,10 @@ class ShuntingYardService:
             # if token is an operator:
             elif self._validation_service.is_operator(token):
                 # while (
-                # there is an operator o2 at the top of the operator stack which is not a left parenthesis,
-                # and (o2 has greater precedence than o1 or (o1 and o2 have the same precedence and o1 is left-associative))
+                #   there is an operator o2 at the top of the operator stack
+                #   which is not a left parenthesis,
+                #   and (o2 has greater precedence than o1 or
+                #   (o1 and o2 have the same precedence and o1 is left-associative))
                 # ):
                 if not self._operator_stack.is_empty():
                     while self._operator_stack.top_operator() != "(" and (
