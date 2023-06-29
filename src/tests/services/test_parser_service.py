@@ -44,3 +44,8 @@ class TestParserService(unittest.TestCase):
                 tokens, variables),
             ["2", "+", "1"]
         )
+
+    def test__add_leading_zero_if_starting_with_minus(self):
+        expression = Expression("-1+1")
+        expression = self.parser_service._add_leading_zero_if_starting_with_minus(expression)
+        self.assertEqual(expression.raw_expression[0], "0")

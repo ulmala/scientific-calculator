@@ -3,7 +3,7 @@ import unittest
 from math import sin
 from unittest.mock import MagicMock, patch
 from entities.expression import Expression
-from services.calculator_service import CalculatorService, calculator_service
+from services.calculator_service import CalculatorService, calculator_service, NotValidVariable
 
 
 class NotValidExpression(Exception):
@@ -128,8 +128,25 @@ class TestCalculatorService(unittest.TestCase):
             token, stack)
         result = self.assertEqual(result, "6")
 
+    def test_add_variable_raises_error_if_invalid_variable_name(self):
+        variable_name = "aa"
+        variable_value = 1
+        with self.assertRaises(NotValidVariable):
+            self.calculator_service.add_variable(
+                variable_name=variable_name,
+                variable_value=variable_value
+            )
 
-class TestCalculatorServiceFull(unittest.TestCase):
+    def test_add_variable_raises_error_if_invalid_variable_value(self):
+        variable_name = "a"
+        variable_value = "b"
+        with self.assertRaises(NotValidVariable):
+            self.calculator_service.add_variable(
+                variable_name=variable_name,
+                variable_value=variable_value
+            )
+
+class TestCalculatorServiceWithMultipleExpressions(unittest.TestCase):
     def setUp(self):
         self.valid_expressions = {
             "(2 + 3.5) * 4 - sin(1.2) ^ 2": (2 + 3.5) * 4 - sin(1.2) ** 2,
@@ -187,3 +204,8 @@ class TestCalculatorServiceFull(unittest.TestCase):
             self.calculator_service.solve("2++2")
         except Exception as e:
             self.assertEqual(str(e), "Consecutive operators are illegal!")
+
+        try:
+            self.calculator_service.solve("1+1-")
+        except Exception as e:
+            self.assertEqual(str(e), "Expression ends with invalid token")

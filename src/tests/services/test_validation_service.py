@@ -79,6 +79,12 @@ class TestValidationService(unittest.TestCase):
         with self.assertRaises(NotValidExpression):
             self.validation_service._matching_parantheses(expression)
 
+    def test__expression_starts_with_minus(self):
+        expression = Expression("-1+2")
+        self.assertTrue(
+            self.validation_service._expression_starts_with_minus(expression)
+        )
+
     def test_is_valid_variable_name_return_false_if_not_valid_variable_name(self):
         self.assertFalse(self.validation_service.is_valid_variable_name("?"))
         self.assertFalse(self.validation_service.is_valid_variable_name("a2"))
