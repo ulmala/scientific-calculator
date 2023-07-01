@@ -119,6 +119,28 @@ class ParserService:
         tokens = re.findall(pattern, expression.raw_expression)
         return tokens
 
+    def _replace_negative_exponent_by_alternative_form(
+            self,
+            expression: Expression
+    ) -> Expression:
+        """
+        Converts negative exponent into alternative form, e.g.
+        2^(-3) --> 1/(2^3). This prevents the postfix notation
+        evaluation to break.
+
+        Args:
+            expression (Expression): expression to be handled
+
+        Returns:
+            Expression: modified expression
+        """
+        pattern = r"(\d+)\^\((-\d+)\)"
+        matches = re.findall(pattern, expression.raw_expression)
+        for base, exponent in matches:
+            replacement = f"1/({base}^{abs(float(exponent))})"
+            expression.raw_expression = expression.raw_expression.replace(f'{base}^({exponent})', replacement)
+        return expression
+
     def parse_to_tokens(
             self,
             expression: Expression,
@@ -129,6 +151,7 @@ class ParserService:
         Executes following:
         - removes whitespaces
         - adds leading zero to the epxression if starting with zero
+        - converts negative exponent into alternative form
         - parse raw epxression in to list of tokens
         - validates that no tokens were dropped in parsing
         - converts all varibales into numeric values
@@ -142,6 +165,7 @@ class ParserService:
         """
         expression = self._remove_whitespaces(expression)
         expression = self._add_leading_zero_if_starting_with_minus(expression)
+        expression = self._replace_negative_exponent_by_alternative_form(expression)
         tokens = self._get_tokens(expression, variables)
         self._validation_service.check_if_tokens_are_not_dropped(
             tokens, expression
