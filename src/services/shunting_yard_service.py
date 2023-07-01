@@ -24,6 +24,9 @@ class ShuntingYardService:
         self._validation_service = validation_service
 
     def _clear_stack_and_queue(self):
+        """
+        Clears stack and queue before algorithm execution
+        """
         self._output_queue = OutputQueue()
         self._operator_stack = OperatorStack()
 
