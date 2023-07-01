@@ -107,3 +107,22 @@ class TestValidationService(unittest.TestCase):
         with self.assertRaises(NotValidExpression):
             self.validation_service.check_if_tokens_are_not_dropped(
                 tokens, expression)
+
+    def test_validate_expression_calls_all_submethods_with_correct_arguments(self):
+        expression = Expression("-1 + 2^(-3)")
+
+        self.validation_service._expression_is_not_empty = MagicMock()
+        self.validation_service._correct_power_operator = MagicMock()
+        self.validation_service._check_if_no_consecutive_operators = MagicMock()
+        self.validation_service._matching_parantheses = MagicMock()
+        self.validation_service._expression_starts_with_valid_token = MagicMock()
+        self.validation_service._expression_ends_with_valid_token = MagicMock()
+
+        self.validation_service.validate_expression(expression)
+
+        self.validation_service._expression_is_not_empty.assert_called_once_with(expression)
+        self.validation_service._correct_power_operator.assert_called_once_with(expression)
+        self.validation_service._check_if_no_consecutive_operators.assert_called_once_with(expression)
+        self.validation_service._matching_parantheses.assert_called_once_with(expression)
+        self.validation_service._expression_starts_with_valid_token.assert_called_once_with(expression)
+        self.validation_service._expression_ends_with_valid_token.assert_called_once_with(expression)
