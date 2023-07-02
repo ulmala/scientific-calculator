@@ -90,6 +90,22 @@ class CalculatorService:
             var_str.append(f"{var_name} = {var_value}")
         return "\n".join(var_str)
 
+    def _create_expression(
+            self,
+            user_expression: str
+    ) -> Expression:
+        """
+        Creates Expression object from user input.
+        This methdo is only for to ease testing
+
+        Args:
+            user_expression (str): user input
+
+        Returns:
+            Expression: expression object
+        """
+        return Expression(raw_expression=user_expression)
+
     def solve(
             self,
             user_expression: str
@@ -108,7 +124,7 @@ class CalculatorService:
         Returns:
             Expression: solved expression
         """
-        expression = Expression(raw_expression=user_expression)
+        expression = self._create_expression(user_expression)
         self._validation_service.validate_expression(expression)
         expression = self._parser_service.parse_to_tokens(
             expression=expression,
