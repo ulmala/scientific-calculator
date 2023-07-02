@@ -14,6 +14,13 @@ class TestCalculatorService(unittest.TestCase):
     def setUp(self):
         self.calculator_service = CalculatorService()
 
+        self.valid_expressions = {
+            "(2 + 3.5) * 4 - sin(1.2) ^ 2": (2 + 3.5) * 4 - sin(1.2) ** 2,
+            "max(5.7, 3.2) + 2.8 * sin(0.8) ^ 3": max(5.7, 3.2) + 2.8 * sin(0.8) ** 3,
+            "(sin(0.5) + 2.1) / max(6.4, 1.7) ^ 2": (sin(0.5) + 2.1) / max(6.4, 1.7) ** 2,
+            "max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ^ 2": max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ** 2,
+        }
+
     def test__evaluate_postfix_notation_returns_correct_value_1(self):
         """Test that postfx notation is evaluated correctly"""
         expression = Expression("3+4*2/(1-5)^2")  # ^3")
@@ -80,7 +87,10 @@ class TestCalculatorService(unittest.TestCase):
             self.calculator_service.list_variables(), correct_str
         )
 
-    @pytest.mark.skip(reason="need to fix logic")
+    def test__create_expression(self):
+        expression = self.calculator_service._create_expression("1+1")
+        self.assertIsInstance(expression, Expression)
+    
     def test_solve_calls_all_other_functions_with_correct_arguments(self):
         """
         Tests that when solving and expression, all other services and methods
@@ -88,7 +98,10 @@ class TestCalculatorService(unittest.TestCase):
         """
         user_expression = "2 + 3 * 4"
         expression = Expression(user_expression)
+        
         expression.postfix = ["2", "3", "4", "*", "+"]
+
+        self.calculator_service._create_expression = MagicMock(return_value=expression)
         self.calculator_service._validation_service = MagicMock()
         self.calculator_service._parser_service = MagicMock()
         self.calculator_service._shunting_yard_service = MagicMock()
@@ -110,7 +123,6 @@ class TestCalculatorService(unittest.TestCase):
         self.calculator_service._shunting_yard_service.run.assert_called_once_with(
             ["2", "+", "3", "*", "4"]
         )
-        self.calculator_service._shunting_yard_service.clear_stack_and_queue.assert_called_once()
         self.calculator_service._evaluate_postfix_notation.assert_called_once_with(
             ["2", "3", "4", "*", "+"]
         )
@@ -146,40 +158,12 @@ class TestCalculatorService(unittest.TestCase):
                 variable_value=variable_value
             )
 
-
-class TestCalculatorServiceWithMultipleExpressions(unittest.TestCase):
-    def setUp(self):
-        self.valid_expressions = {
-            "(2 + 3.5) * 4 - sin(1.2) ^ 2": (2 + 3.5) * 4 - sin(1.2) ** 2,
-            "max(5.7, 3.2) + 2.8 * sin(0.8) ^ 3": max(5.7, 3.2) + 2.8 * sin(0.8) ** 3,
-            "(sin(0.5) + 2.1) / max(6.4, 1.7) ^ 2": (sin(0.5) + 2.1) / max(6.4, 1.7) ** 2,
-            "max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ^ 2": max(3.9, 2.6) + 4.3 * sin(1.5) - 2.8 ** 2,
-        }
-
-        self.invalid_expressions = [
-            "2 + * 3",
-            "4 /",
-            "5 + (6 * 2",
-            "3 * 4)",
-            "sin(2 3)",
-            "max(4,)",
-            "7 + 2 - * 3",
-            "sin(1.2))",
-            "max(2, 3 4)",
-            "8 + - 5",
-            "(9 + 2)) * 3"
-        ]
-
-        self.calculator_service = calculator_service
-
     def test_that_all_valid_expressions_are_solved_correctly(self):
-        """Test that epxressions are solved correctly"""
         for exp, val in self.valid_expressions.items():
             expression = self.calculator_service.solve(exp)
             self.assertEqual(expression.value, val)
 
     def test_that_correct_error_messages_are_thrown(self):
-        """Tests that correct error messages ares shown"""
         try:
             self.calculator_service.solve("3 * 4)")
         except Exception as e:

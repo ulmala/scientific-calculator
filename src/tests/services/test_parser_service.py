@@ -51,6 +51,10 @@ class TestParserService(unittest.TestCase):
             expression)
         self.assertEqual(expression.raw_expression[0], "0")
 
+    def test__replace_negative_exponent_by_alternative_form(self):
+        expression = Expression("2^(-3)+1*2^3")
+        expression = self.parser_service._replace_negative_exponent_by_alternative_form(expression)
+        self.assertEqual(expression.raw_expression, "1/(2^3.0)+1*2^3")
 
     def test_parse_to_tokens_calls_all_submethods_with_correct_arguments(self):
         expression = Expression("-1 + 2^(-3)")
