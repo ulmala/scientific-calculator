@@ -44,7 +44,7 @@ By using the command line UI, user can:
 - list already declared variables and their values
 - list calculator instructions
 
-Snapshot from the UI:
+Snapshot from the UI:  
 ![alt text](images/ui.png)
 
 ## Other functionalities
