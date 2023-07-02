@@ -23,8 +23,8 @@ class TestCalculatorService(unittest.TestCase):
 
     def test__evaluate_postfix_notation_returns_correct_value_1(self):
         """Test that postfx notation is evaluated correctly"""
-        expression = Expression("3+4*2/(1-5)^2")  # ^3")
-        correct_value = 3+4*2/(1-5)**2  # **3
+        expression = Expression("3+4*2/(1-5)^2")
+        correct_value = 3+4*2/(1-5)**2
         tokens = [
             "3", "+", "4", "*", "2", "/", "(",
             "1", "-", "5", ")", "^", "2"
