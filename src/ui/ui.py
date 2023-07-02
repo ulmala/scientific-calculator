@@ -43,25 +43,23 @@ class UI:
         Prints calculator instructions
         """
         print("\n\033[4mOPERATORS\033[0m:")
-        print("This calculator supports following  arithmetic operators:")
-        print(",   ".join(OPERATORS), "\t\t(NOTE: '^' is power operator)")
+        print("This calculator supports following operators:")
+        print("   ".join(OPERATORS), "\t\t(NOTE: '^' is power operator)")
+        print("Valid parantheses are '()'")
 
         print("\n\033[4mFUNCTIONS\033[0m:")
         print("\nAnd this calculator supports following functions: ")
         print("   ".join(SUPPORTED_FUNCTIONS))
-        
+
         print("\n\033[4mVARIABLES\033[0m:")
         print("You can define custom variables which can be used in expressions.")
         print("Variable must be single alphabet and the assigned value must be number")
-
-        print("\n\nYou can view theses instructions any time by typing 'help'")
-        print("Press any key to continue")
-        input()
 
     def _show_header(self) -> None:
         """
         Prints application header
         """
+        print("".join(["\n"] * 1000))
         pad_len = (self._line_length - len(self._header)) // 2
         print("".join(["="] * self._line_length))
         print(
@@ -69,7 +67,12 @@ class UI:
              (pad_len + (self._line_length - len(self._header)) % 2)
         )
         print("".join(["="] * self._line_length))
-        
+        print(
+            "This is a scientific calculator which solves mathematical epxressions."
+            ""
+        )
+        print("Instructions are shown below:")
+
     def _show_variables(self) -> None:
         """
         Prints declared variables (if any)
@@ -83,7 +86,6 @@ class UI:
         self._show_header()
         self._show_instructions()
         while True:
-            print("\n\n\n")
             print("".join(["="] * self._line_length))
             print()
             print(
@@ -92,23 +94,26 @@ class UI:
                 "- 'vars' to list declared variables\n"
                 "- 'exp' to submit expression\n"
                 "- 'help' for instructions\n"
+                "- 'quit' to exit the program"
             )
             user_input = input(">>")
 
-            if user_input == "help":
-                self._show_instructions()
-                continue
+            if user_input == "var":
+                self._handle_add_variable()
 
-            if user_input == "exp":
-                user_expression = input("Type your equation here: ")
+            elif user_input == "vars":
+                self._show_variables()
+
+            elif user_input == "exp":
+                user_expression = input("Type your expression here: ")
                 try:
                     expression = calculator_service.solve(user_expression)
                 except NotValidExpression as e:
                     print(f"*!*!*!*!*!*! {e} *!*!*!*!*!*!")
+                    input("\nPress any key to continue")
                     continue
 
                 print(f"\n\033[4mResult:{expression}\033[0m")
-
 
                 user_input = input(
                     "Enter variable name to store the result into variable (else press Enter): "
@@ -118,11 +123,13 @@ class UI:
                         var_name=user_input,
                         var_value=expression.value
                     )
+                continue
 
-            if user_input == "var":
-                self._handle_add_variable()
+            elif user_input == "help":
+                self._show_instructions()
+                continue
 
-            if user_input == "vars":
-                self._show_variables()
+            elif user_input == "quit":
+                exit()
 
             input("\nPress any key to continue")
