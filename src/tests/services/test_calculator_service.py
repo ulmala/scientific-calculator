@@ -1,13 +1,8 @@
-import pytest
 import unittest
 from math import sin
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from entities.expression import Expression
-from services.calculator_service import CalculatorService, calculator_service, NotValidVariable
-
-
-class NotValidExpression(Exception):
-    pass
+from services.calculator_service import CalculatorService, NotValidVariable
 
 
 class TestCalculatorService(unittest.TestCase):
@@ -90,7 +85,7 @@ class TestCalculatorService(unittest.TestCase):
     def test__create_expression(self):
         expression = self.calculator_service._create_expression("1+1")
         self.assertIsInstance(expression, Expression)
-    
+
     def test_solve_calls_all_other_functions_with_correct_arguments(self):
         """
         Tests that when solving and expression, all other services and methods
@@ -98,10 +93,11 @@ class TestCalculatorService(unittest.TestCase):
         """
         user_expression = "2 + 3 * 4"
         expression = Expression(user_expression)
-        
+
         expression.postfix = ["2", "3", "4", "*", "+"]
 
-        self.calculator_service._create_expression = MagicMock(return_value=expression)
+        self.calculator_service._create_expression = MagicMock(
+            return_value=expression)
         self.calculator_service._validation_service = MagicMock()
         self.calculator_service._parser_service = MagicMock()
         self.calculator_service._shunting_yard_service = MagicMock()

@@ -53,25 +53,35 @@ class TestParserService(unittest.TestCase):
 
     def test__replace_negative_exponent_by_alternative_form(self):
         expression = Expression("2^(-3)+1*2^3")
-        expression = self.parser_service._replace_negative_exponent_by_alternative_form(expression)
+        expression = self.parser_service._replace_negative_exponent_by_alternative_form(
+            expression)
         self.assertEqual(expression.raw_expression, "1/(2^3.0)+1*2^3")
 
     def test_parse_to_tokens_calls_all_submethods_with_correct_arguments(self):
         expression = Expression("-1 + 2^(-3)")
         variables = {}
-        self.parser_service._remove_whitespaces = MagicMock(return_value=expression)
-        self.parser_service._add_leading_zero_if_starting_with_minus = MagicMock(return_value=expression)
-        self.parser_service._replace_negative_exponent_by_alternative_form = MagicMock(return_value=expression)
-        self.parser_service._get_tokens = MagicMock(return_value=["0", "-", "1", "+", "1", "/", "(", "2", "^", "3", ")"])
+        self.parser_service._remove_whitespaces = MagicMock(
+            return_value=expression)
+        self.parser_service._add_leading_zero_if_starting_with_minus = MagicMock(
+            return_value=expression)
+        self.parser_service._replace_negative_exponent_by_alternative_form = MagicMock(
+            return_value=expression)
+        self.parser_service._get_tokens = MagicMock(
+            return_value=["0", "-", "1", "+", "1", "/", "(", "2", "^", "3", ")"])
         self.parser_service._validation_service.check_if_tokens_are_not_dropped = MagicMock()
-        self.parser_service._convert_variables_to_values = MagicMock(return_value=["0", "-", "1", "+", "1", "/", "(", "2", "^", "3", ")"])
+        self.parser_service._convert_variables_to_values = MagicMock(
+            return_value=["0", "-", "1", "+", "1", "/", "(", "2", "^", "3", ")"])
 
         result = self.parser_service.parse_to_tokens(expression, variables)
 
-        self.parser_service._remove_whitespaces.assert_called_once_with(expression)
-        self.parser_service._add_leading_zero_if_starting_with_minus.assert_called_once_with(expression)
-        self.parser_service._replace_negative_exponent_by_alternative_form.assert_called_once_with(expression)
-        self.parser_service._get_tokens.assert_called_once_with(expression, variables)
+        self.parser_service._remove_whitespaces.assert_called_once_with(
+            expression)
+        self.parser_service._add_leading_zero_if_starting_with_minus.assert_called_once_with(
+            expression)
+        self.parser_service._replace_negative_exponent_by_alternative_form.assert_called_once_with(
+            expression)
+        self.parser_service._get_tokens.assert_called_once_with(
+            expression, variables)
         self.parser_service._validation_service.check_if_tokens_are_not_dropped.assert_called_once_with(
             self.parser_service._get_tokens.return_value, expression
         )
@@ -80,4 +90,3 @@ class TestParserService(unittest.TestCase):
         )
 
         self.assertEqual(result, expression)
-

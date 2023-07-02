@@ -138,7 +138,8 @@ class ParserService:
         matches = re.findall(pattern, expression.raw_expression)
         for base, exponent in matches:
             replacement = f"1/({base}^{abs(float(exponent))})"
-            expression.raw_expression = expression.raw_expression.replace(f'{base}^({exponent})', replacement)
+            expression.raw_expression = expression.raw_expression.replace(
+                f'{base}^({exponent})', replacement)
         return expression
 
     def parse_to_tokens(
@@ -165,7 +166,8 @@ class ParserService:
         """
         expression = self._remove_whitespaces(expression)
         expression = self._add_leading_zero_if_starting_with_minus(expression)
-        expression = self._replace_negative_exponent_by_alternative_form(expression)
+        expression = self._replace_negative_exponent_by_alternative_form(
+            expression)
         tokens = self._get_tokens(expression, variables)
         self._validation_service.check_if_tokens_are_not_dropped(
             tokens, expression

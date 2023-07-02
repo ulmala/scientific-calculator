@@ -120,9 +120,15 @@ class TestValidationService(unittest.TestCase):
 
         self.validation_service.validate_expression(expression)
 
-        self.validation_service._expression_is_not_empty.assert_called_once_with(expression)
-        self.validation_service._correct_power_operator.assert_called_once_with(expression)
-        self.validation_service._check_if_no_consecutive_operators.assert_called_once_with(expression)
-        self.validation_service._matching_parantheses.assert_called_once_with(expression)
-        self.validation_service._expression_starts_with_valid_token.assert_called_once_with(expression)
-        self.validation_service._expression_ends_with_valid_token.assert_called_once_with(expression)
+        self.validation_service._expression_is_not_empty.assert_called_once_with(
+            expression)
+        self.validation_service._correct_power_operator.assert_called_once_with(
+            expression)
+        self.validation_service._check_if_no_consecutive_operators.assert_called_once_with(
+            expression)
+        self.validation_service._matching_parantheses.assert_called_once_with(
+            expression)
+        self.validation_service._expression_starts_with_valid_token.assert_called_once_with(
+            expression)
+        self.validation_service._expression_ends_with_valid_token.assert_called_once_with(
+            expression)
