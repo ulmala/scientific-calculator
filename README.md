@@ -1,7 +1,7 @@
 # scientific-calculator
 University of Helsinki course: Data structures and Algorithms Lab  
 
-Final version of the course project work in release [final-version](https://github.com/ulmala/scientific-calculator/releases/tag/final-version). See [instructions.md](documentation/instructions_document.md) file to for setup guide.
+Final version of the course project work in release [final-version](https://github.com/ulmala/scientific-calculator/releases/tag/final-version). See [instructions.md](documentation/instructions_document.md) file for setup guide.
 
 ## Weekly reports
 - [week 1](documentation/weekly_reports/week_1.md)
